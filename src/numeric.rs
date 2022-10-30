@@ -1,7 +1,6 @@
 use std::f64::NAN;
 
-use peroxide::prelude::integrate;
-
+use peroxide::{fuga::Integral::*, numerical::integral::*};
 #[derive(Debug, Clone)]
 pub enum NumericFieldValue {
     Normal {
@@ -18,6 +17,12 @@ pub enum NumericFieldValue {
         scaling_factor: f64,
     },
     Error,
+}
+
+#[derive(Debug, Clone)]
+pub struct DistributionPlot {
+    pub x: Vec<f64>,
+    pub y: Vec<f64>,
 }
 
 impl NumericFieldValue {
@@ -65,6 +70,19 @@ impl NumericFieldValue {
         }
     }
 
+    pub fn sigma(&self) -> f64 {
+        match self {
+            NumericFieldValue::Normal { sigma, mean: _ } => *sigma,
+            NumericFieldValue::Exact(v) => 0.0,
+            NumericFieldValue::Uniform { min, max } => (max - min) / 12.0,
+            NumericFieldValue::Combination {
+                components,
+                scaling_factor: _,
+            } => components.iter().map(|val| val.sigma()).sum::<f64>() / (components.len() as f64),
+            NumericFieldValue::Error => NAN,
+        }
+    }
+
     pub fn merge(v: Vec<Self>) -> Self {
         // propagate errors
         if v.iter().any(|val| match val {
@@ -84,13 +102,25 @@ impl NumericFieldValue {
             return NumericFieldValue::Error;
         }
         let mean = v.iter().map(|val| val.mean()).sum::<f64>() / (v.len() as f64);
+        let sigma = v.iter().map(|val| val.sigma()).sum::<f64>() / (v.len() as f64);
+        let range = (mean - 3.0 * sigma, mean + 3.0 * sigma);
         let area = integrate(
             |x1| v.iter().map(|val| val.get_value(x1)).product(),
-            (-2.0 * mean.abs(), 2.0 * mean.abs()),
+            range,
+            G20K41(1.0e-3),
         );
         return NumericFieldValue::Combination {
             components: v,
             scaling_factor: 1.0 / area,
         };
+    }
+
+    pub fn get_distribution(&self, steps: usize) -> DistributionPlot {
+        let x: Vec<f64> = (0..steps)
+            .map(|i| (i as f64 / (steps as f64) - 0.5) * 2.0 * 2.0 * self.sigma() + self.mean())
+            .collect();
+        let y = x.clone().into_iter().map(|x| self.get_value(x)).collect();
+
+        DistributionPlot { x, y }
     }
 }
