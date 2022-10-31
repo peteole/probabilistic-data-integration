@@ -1,16 +1,20 @@
 use std::collections::HashMap;
 
+use async_trait::async_trait;
+
 use crate::{numeric::NumericFieldValue, search_result::SearchResult, string::StringFieldValue};
 
+#[async_trait]
 pub trait DataSource {
-    fn search(&self, query: String) -> Option<SearchResult>;
+    async fn search(&self, query: String) -> Option<SearchResult>;
 }
 
 pub struct MockDataSource {
     pub data: HashMap<String, SearchResult>,
 }
+#[async_trait]
 impl DataSource for MockDataSource {
-    fn search(&self, query: String) -> Option<SearchResult> {
+    async fn search(&self, query: String) -> Option<SearchResult> {
         return self.data.get(&query).cloned();
     }
 }

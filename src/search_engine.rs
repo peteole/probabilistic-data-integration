@@ -1,3 +1,4 @@
+use futures::future::join_all;
 use std::collections::HashMap;
 
 use crate::{
@@ -63,17 +64,21 @@ impl SearchEngine {
         }
         Ok(())
     }
-    pub fn search(&self, query: String) -> SearchResponse {
-        let results: Vec<SearchResult> = self
+    pub async fn search(&self, query: String) -> SearchResponse {
+        let futures = self
             .data_sources
             .iter()
-            .filter_map(|source| source.search(query.clone()))
+            .map(|source| source.search(query.clone()));
+        let results = join_all(futures).await;
+        let filtered_results: Vec<SearchResult> = results
+            .into_iter()
+            .filter_map(|r| r)
             .filter(|r| match self.verify(r) {
                 Ok(_) => true,
                 Err(_) => false,
             })
             .collect();
-        let merged = SearchResult::merge(&results);
+        let merged = SearchResult::merge(&filtered_results);
 
         SearchResponse {
             fields: merged

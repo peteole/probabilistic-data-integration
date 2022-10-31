@@ -1,23 +1,27 @@
 pub mod datasource;
+pub mod datasources;
 pub mod numeric;
 pub mod search_engine;
 pub mod search_result;
 pub mod string;
+
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
 
     use crate::{
         datasource::MockDataSource,
+        datasources::openFoodFacts::OpenFoodFactsDataSource,
         search_engine::{Field, FieldType, FieldValue, SearchEngine},
     };
 
-    #[test]
-    fn it_works() {
+    #[tokio::test]
+    async fn it_works() {
         let engine = SearchEngine {
             data_sources: vec![
                 Box::new(MockDataSource::demo1()),
                 Box::new(MockDataSource::demo2()),
+                Box::new(OpenFoodFactsDataSource::default()),
             ],
             search_fields: HashMap::from([
                 (
@@ -54,7 +58,7 @@ mod tests {
                 ),
             ]),
         };
-        let result = engine.search("apple".to_string());
+        let result = engine.search("apple".to_string()).await;
         println!("{:?}", result);
         let (_desc, value) = result.fields.get("calories").unwrap();
         match value {
