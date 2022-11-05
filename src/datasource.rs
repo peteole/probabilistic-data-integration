@@ -28,16 +28,15 @@ impl MockDataSource {
                     numeric_fields: HashMap::from([
                         ("weight".into(), NumericFieldValue::Exact(0.5)),
                         (
-                            "calories".into(),
+                            "energy_density".into(),
                             NumericFieldValue::Normal {
-                                sigma: 100.0,
+                                sigma: 200.0,
                                 mean: 300.0,
                             },
                         ),
                     ]),
                     string_fields: HashMap::from([
                         ("color".into(), StringFieldValue::Exact("red".to_string())),
-                        ("taste".into(), StringFieldValue::Exact("sweet".to_string())),
                     ]),
                 },
             )]),
@@ -52,16 +51,15 @@ impl MockDataSource {
                     numeric_fields: HashMap::from([
                         ("weight".to_string(), NumericFieldValue::Exact(0.5)),
                         (
-                            "calories".to_string(),
+                            "energy_density".to_string(),
                             NumericFieldValue::Uniform {
-                                min: 280.0,
-                                max: 290.0,
+                                min: 200.0,
+                                max: 230.0,
                             },
                         ),
                     ]),
                     string_fields: HashMap::from([
                         ("color".into(), StringFieldValue::Exact("red".to_string())),
-                        ("taste".into(), StringFieldValue::Exact("sweet".to_string())),
                     ]),
                 },
             )]),

@@ -34,11 +34,11 @@ mod tests {
                     },
                 ),
                 (
-                    "calories".to_string(),
+                    "energy_density".to_string(),
                     Field {
-                        description: "Calories of the object".to_string(),
+                        description: "Energy of the object".to_string(),
                         field_type: FieldType::Float {
-                            unit: "kcal".to_string(),
+                            unit: "Joule/100g".to_string(),
                         },
                     },
                 ),
@@ -49,18 +49,11 @@ mod tests {
                         field_type: FieldType::String,
                     },
                 ),
-                (
-                    "taste".to_string(),
-                    Field {
-                        description: "Taste of the object".to_string(),
-                        field_type: FieldType::String,
-                    },
-                ),
             ]),
         };
         let result = engine.search("apple".to_string()).await;
         println!("{:?}", result);
-        let (_desc, value) = result.fields.get("calories").unwrap();
+        let (_desc, value) = result.fields.get("energy_density").unwrap();
         match value {
             FieldValue::Numeric(v) => {
                 println!("Mean: {}", v.mean());

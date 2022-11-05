@@ -1,7 +1,12 @@
+use std::collections::HashMap;
+
 use async_trait::async_trait;
 use openapi::apis::configuration::Configuration;
 
-use crate::{datasource::DataSource, search_result::SearchResult};
+use crate::{
+    datasource::DataSource, numeric::NumericFieldValue, search_engine::FieldValue,
+    search_result::SearchResult,
+};
 
 pub struct OpenFoodFactsDataSource {
     config: Configuration,
@@ -9,16 +14,37 @@ pub struct OpenFoodFactsDataSource {
 #[async_trait]
 impl DataSource for OpenFoodFactsDataSource {
     async fn search(&self, query: String) -> Option<SearchResult> {
-        let raw_res =
-            openapi::apis::read_requests_api::get_search(&self.config,openapi::apis::read_requests_api::GetSearchParams { categories_tags_en: None, labels_tags_en: None, fields: Some("code,product_name".into()) }).await;
-        print!("{:?}", raw_res);
+        let raw_res = openapi::apis::read_requests_api::get_search(
+            &self.config,
+            openapi::apis::read_requests_api::GetSearchParams {
+                categories_tags_en: Some(query),
+                labels_tags_en: None,
+                fields: Some("code,product_name,nutriscore_data,nutriments".into()),
+            },
+        )
+        .await;
+        //print!("{:?}", raw_res);
         match raw_res {
             Ok(res) => {
                 //println!("{:?}", res);
-                match res.products{
+                match res.products {
                     Some(products) => {
-                        print!("Products: {:?}", products);
-                    },
+                        let product = products.first().unwrap().clone();
+                        if let Some(energy) = product.nutriments?.energy {
+                            return Some(SearchResult {
+                                numeric_fields: HashMap::from([(
+                                    "energy_density".to_string(),
+                                    NumericFieldValue::Normal {
+                                        sigma: energy.into(),
+                                        mean: (energy / 10.0).into(),
+                                    },
+                                )]),
+                                string_fields: HashMap::new(),
+                            });
+                        }
+                        //print!("Products: {:?}", products[0].nutriments);
+                        //println!("{:?}", products[0].code);
+                    }
                     None => {}
                 }
                 Some(SearchResult::default())

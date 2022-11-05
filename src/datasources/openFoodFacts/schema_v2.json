@@ -249,7 +249,7 @@
           {
             "in": "formData",
             "name": "imgid",
-            "type": "integer"
+            "type": "number"
           },
           {
             "in": "formData",
@@ -259,22 +259,22 @@
           {
             "in": "formData",
             "name": "x1",
-            "type": "integer"
+            "type": "number"
           },
           {
             "in": "formData",
             "name": "y1",
-            "type": "integer"
+            "type": "number"
           },
           {
             "in": "formData",
             "name": "x2",
-            "type": "integer"
+            "type": "number"
           },
           {
             "in": "formData",
             "name": "y2",
-            "type": "integer"
+            "type": "number"
           }
         ],
         "responses": {
@@ -455,7 +455,7 @@
     "add_or_edit_a_product-2": {
       "properties": {
         "status": {
-          "type": "integer"
+          "type": "number"
         },
         "status_verbose": {
           "type": "string"
@@ -536,7 +536,7 @@
             },
             "imgid": {
               "example": 123,
-              "type": "integer"
+              "type": "number"
             },
             "thumb_url": {
               "example": "123.100.jpg",
@@ -551,7 +551,7 @@
         },
         "imgid": {
           "example": 123,
-          "type": "integer"
+          "type": "number"
         },
         "status": {
           "example": "status ok",
@@ -573,23 +573,23 @@
         },
         "imgid": {
           "example": 2,
-          "type": "integer"
+          "type": "number"
         },
         "x1": {
           "example": 0,
-          "type": "integer"
+          "type": "number"
         },
         "x2": {
           "example": 145,
-          "type": "integer"
+          "type": "number"
         },
         "y1": {
           "example": 0,
-          "type": "integer"
+          "type": "number"
         },
         "y2": {
           "example": 145,
-          "type": "integer"
+          "type": "number"
         }
       },
       "type": "object"
@@ -5868,7 +5868,7 @@
           "type": "string"
         },
         "status": {
-          "type": "integer"
+          "type": "number"
         },
         "status_verbose": {
           "type": "string"
@@ -5886,10 +5886,10 @@
             "100": {
               "properties": {
                 "h": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "w": {
-                  "type": "integer"
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -5897,10 +5897,10 @@
             "400": {
               "properties": {
                 "h": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "w": {
-                  "type": "integer"
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -5908,10 +5908,10 @@
             "full": {
               "properties": {
                 "h": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "w": {
-                  "type": "integer"
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -5936,7 +5936,7 @@
         },
         "height": {
           "description": "Height of the image.\n\nThis is just a suggestion coming from the server,\nthe client may choose to use its own dimensions for the image.\n",
-          "type": "integer"
+          "type": "number"
         },
         "url": {
           "description": "full URL of the image",
@@ -5944,7 +5944,7 @@
         },
         "width": {
           "description": "Width of the image.\n\nThis is just a suggestion coming from the server, \nthe client may choose to use its own dimensions for the image.\n",
-          "type": "integer"
+          "type": "number"
         }
       },
       "title": "image_element",
@@ -5963,22 +5963,22 @@
             "$ref": "#/definitions/ingredient"
           },
           "percent": {
-            "type": "integer"
+            "type": "number"
           },
           "percent_estimate": {
             "type": [
-              "integer",
+              "number",
               "number"
             ]
           },
           "percent_max": {
             "type": [
-              "integer",
+              "number",
               "number"
             ]
           },
           "percent_min": {
-            "type": "integer"
+            "type": "number"
           },
           "text": {
             "type": "string"
@@ -5998,7 +5998,7 @@
       "properties": {
         "status": {
           "example": 1,
-          "type": "integer"
+          "type": "number"
         }
       },
       "type": "object"
@@ -6136,7 +6136,7 @@
         },
         "additives_n": {
           "description": "Number of food additives.\n",
-          "type": "integer"
+          "type": "number"
         },
         "additives_original_tags": {
           "items": {
@@ -6208,7 +6208,7 @@
           "type": "array"
         },
         "carbon_footprint_percent_of_known_ingredients": {
-          "type": "integer"
+          "type": "number"
         },
         "categories": {
           "type": "string"
@@ -6290,7 +6290,7 @@
           "type": "string"
         },
         "complete": {
-          "type": "integer"
+          "type": "number"
         },
         "completeness": {
           "type": "number"
@@ -6337,7 +6337,7 @@
         },
         "created_t": {
           "description": "Date when the product was added (UNIX timestamp format).    \n",
-          "type": "integer"
+          "type": "number"
         },
         "creator": {
           "description": "The contributor who added the product first.\n",
@@ -6409,7 +6409,7 @@
                             "type": "string"
                           },
                           "percent": {
-                            "type": "integer"
+                            "type": "number"
                           }
                         },
                         "type": "object"
@@ -6417,10 +6417,10 @@
                       "type": "array"
                     },
                     "epi_score": {
-                      "type": "integer"
+                      "type": "number"
                     },
                     "epi_value": {
-                      "type": "integer"
+                      "type": "number"
                     },
                     "origins_from_origins_field": {
                       "items": {
@@ -6431,193 +6431,193 @@
                     "transportation_scores": {
                       "properties": {
                         "ad": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "al": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "at": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ax": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ba": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "be": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "bg": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ch": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "cy": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "cz": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "de": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "dk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "dz": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ee": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "eg": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "es": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "fi": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "fo": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "fr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "gg": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "gi": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "gr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "hr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "hu": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ie": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "il": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "im": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "is": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "it": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "je": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lb": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "li": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lt": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lu": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lv": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ly": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ma": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "mc": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "md": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "me": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "mk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "mt": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "nl": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "no": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "pl": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ps": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "pt": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ro": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "rs": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "se": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "si": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sj": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sm": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sy": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "tn": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "tr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ua": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "uk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "us": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "va": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "world": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "xk": {
-                          "type": "integer"
+                          "type": "number"
                         }
                       },
                       "type": "object"
@@ -6625,193 +6625,193 @@
                     "transportation_values": {
                       "properties": {
                         "ad": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "al": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "at": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ax": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ba": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "be": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "bg": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ch": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "cy": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "cz": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "de": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "dk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "dz": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ee": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "eg": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "es": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "fi": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "fo": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "fr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "gg": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "gi": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "gr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "hr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "hu": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ie": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "il": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "im": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "is": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "it": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "je": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lb": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "li": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lt": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lu": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lv": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ly": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ma": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "mc": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "md": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "me": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "mk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "mt": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "nl": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "no": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "pl": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ps": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "pt": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ro": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "rs": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "se": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "si": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sj": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sm": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sy": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "tn": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "tr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ua": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "uk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "us": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "va": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "world": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "xk": {
-                          "type": "integer"
+                          "type": "number"
                         }
                       },
                       "type": "object"
@@ -6819,193 +6819,193 @@
                     "values": {
                       "properties": {
                         "ad": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "al": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "at": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ax": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ba": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "be": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "bg": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ch": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "cy": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "cz": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "de": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "dk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "dz": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ee": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "eg": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "es": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "fi": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "fo": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "fr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "gg": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "gi": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "gr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "hr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "hu": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ie": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "il": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "im": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "is": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "it": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "je": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lb": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "li": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lt": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lu": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "lv": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ly": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ma": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "mc": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "md": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "me": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "mk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "mt": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "nl": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "no": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "pl": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ps": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "pt": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ro": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "rs": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "se": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "si": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sj": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sm": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "sy": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "tn": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "tr": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "ua": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "uk": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "us": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "va": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "world": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "xk": {
-                          "type": "integer"
+                          "type": "number"
                         }
                       },
                       "type": "object"
@@ -7019,16 +7019,16 @@
                 "packaging": {
                   "properties": {
                     "non_recyclable_and_non_biodegradable_materials": {
-                      "type": "integer"
+                      "type": "number"
                     },
                     "packagings": {
                       "items": {
                         "properties": {
                           "ecoscore_material_score": {
-                            "type": "integer"
+                            "type": "number"
                           },
                           "ecoscore_shape_ratio": {
-                            "type": "integer"
+                            "type": "number"
                           },
                           "material": {
                             "type": "string"
@@ -7042,10 +7042,10 @@
                       "type": "array"
                     },
                     "score": {
-                      "type": "integer"
+                      "type": "number"
                     },
                     "value": {
-                      "type": "integer"
+                      "type": "number"
                     },
                     "warning": {
                       "type": "string"
@@ -7063,7 +7063,7 @@
                       "type": "array"
                     },
                     "value": {
-                      "type": "integer"
+                      "type": "number"
                     },
                     "warning": {
                       "type": "string"
@@ -7077,7 +7077,7 @@
                       "type": "string"
                     },
                     "value": {
-                      "type": "integer"
+                      "type": "number"
                     }
                   },
                   "type": "object"
@@ -7094,7 +7094,7 @@
                   "type": "number"
                 },
                 "co2_consumption": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "co2_distribution": {
                   "type": "number"
@@ -7121,7 +7121,7 @@
                   "type": "number"
                 },
                 "ef_consumption": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ef_distribution": {
                   "type": "number"
@@ -7139,14 +7139,14 @@
                   "type": "number"
                 },
                 "is_beverage": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "name_en": {
                   "description": "This can be returned in many other languages\nlike name_fr (for french).\n",
                   "type": "string"
                 },
                 "score": {
-                  "type": "integer"
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -7351,213 +7351,213 @@
             "missing": {
               "properties": {
                 "labels": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "origins": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "packagings": {
-                  "type": "integer"
+                  "type": "number"
                 }
               },
               "type": "object"
             },
             "missing_data_warning": {
-              "type": "integer"
+              "type": "number"
             },
             "score": {
-              "type": "integer"
+              "type": "number"
             },
             "scores": {
               "properties": {
                 "ad": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "al": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "at": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ax": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ba": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "be": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "bg": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ch": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "cy": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "cz": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "de": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "dk": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "dz": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ee": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "eg": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "es": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "fi": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "fo": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "fr": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "gg": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "gi": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "gr": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "hr": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "hu": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ie": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "il": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "im": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "is": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "it": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "je": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "lb": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "li": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "lt": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "lu": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "lv": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ly": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ma": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "mc": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "md": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "me": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "mk": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "mt": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "nl": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "no": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "pl": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ps": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "pt": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ro": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "rs": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "se": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "si": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "sj": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "sk": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "sm": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "sy": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "tn": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "tr": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "ua": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "uk": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "us": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "va": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "world": {
-                  "type": "integer"
+                  "type": "number"
                 },
                 "xk": {
-                  "type": "integer"
+                  "type": "number"
                 }
               },
               "type": "object"
@@ -7575,7 +7575,7 @@
           "type": "string"
         },
         "ecoscore_score": {
-          "type": "integer"
+          "type": "number"
         },
         "ecoscore_tags": {
           "items": {
@@ -7631,7 +7631,7 @@
           "type": "array"
         },
         "fruits-vegetables-nuts_100g_estimate": {
-          "type": "integer"
+          "type": "number"
         },
         "generic_name": {
           "description": "Legal name of the product as regulated \nby the European authorities.\n",
@@ -7721,10 +7721,10 @@
           "type": "array"
         },
         "ingredients_from_or_that_may_be_from_palm_oil_n": {
-          "type": "integer"
+          "type": "number"
         },
         "ingredients_from_palm_oil_n": {
-          "type": "integer"
+          "type": "number"
         },
         "ingredients_from_palm_oil_tags": {
           "items": {
@@ -7739,7 +7739,7 @@
           "type": "array"
         },
         "ingredients_n": {
-          "type": "integer"
+          "type": "number"
         },
         "ingredients_n_tags": {
           "items": {
@@ -7754,7 +7754,7 @@
           "type": "array"
         },
         "ingredients_percent_analysis": {
-          "type": "integer"
+          "type": "number"
         },
         "ingredients_tags": {
           "items": {
@@ -7840,7 +7840,7 @@
           "type": "string"
         },
         "ingredients_that_may_be_from_palm_oil_n": {
-          "type": "integer"
+          "type": "number"
         },
         "ingredients_that_may_be_from_palm_oil_tags": {
           "items": {
@@ -7849,16 +7849,16 @@
           "type": "array"
         },
         "ingredients_with_specified_percent_n": {
-          "type": "integer"
+          "type": "number"
         },
         "ingredients_with_specified_percent_sum": {
-          "type": "integer"
+          "type": "number"
         },
         "ingredients_with_unspecified_percent_n": {
-          "type": "integer"
+          "type": "number"
         },
         "ingredients_with_unspecified_percent_sum": {
-          "type": "integer"
+          "type": "number"
         },
         "interface_version_created": {
           "type": "string"
@@ -7870,7 +7870,7 @@
           "$ref": "#/definitions/panels"
         },
         "known_ingredients_n": {
-          "type": "integer"
+          "type": "number"
         },
         "labels": {
           "type": "string"
@@ -7899,22 +7899,22 @@
         "languages": {
           "properties": {
             "en:arabic": {
-              "type": "integer"
+              "type": "number"
             },
             "en:english": {
-              "type": "integer"
+              "type": "number"
             },
             "en:french": {
-              "type": "integer"
+              "type": "number"
             },
             "en:german": {
-              "type": "integer"
+              "type": "number"
             },
             "en:italian": {
-              "type": "integer"
+              "type": "number"
             },
             "en:spanish": {
-              "type": "integer"
+              "type": "number"
             }
           },
           "type": "object"
@@ -7922,22 +7922,22 @@
         "languages_codes": {
           "properties": {
             "ar": {
-              "type": "integer"
+              "type": "number"
             },
             "de": {
-              "type": "integer"
+              "type": "number"
             },
             "en": {
-              "type": "integer"
+              "type": "number"
             },
             "es": {
-              "type": "integer"
+              "type": "number"
             },
             "fr": {
-              "type": "integer"
+              "type": "number"
             },
             "it": {
-              "type": "integer"
+              "type": "number"
             }
           },
           "type": "object"
@@ -7961,7 +7961,7 @@
           "type": "array"
         },
         "last_checked_t": {
-          "type": "integer"
+          "type": "number"
         },
         "last_checker": {
           "type": "string"
@@ -7982,14 +7982,14 @@
           "type": "array"
         },
         "last_image_t": {
-          "type": "integer"
+          "type": "number"
         },
         "last_modified_by": {
           "type": "string"
         },
         "last_modified_t": {
           "description": "Date when the product page was last modified.\n",
-          "type": "integer"
+          "type": "number"
         },
         "lc": {
           "type": "string"
@@ -8044,7 +8044,7 @@
           "type": "string"
         },
         "nova_group": {
-          "type": "integer"
+          "type": "number"
         },
         "nova_groups": {
           "type": "string"
@@ -8110,19 +8110,19 @@
         "nutriments": {
           "properties": {
             "alcohol": {
-              "type": "integer"
+              "type": "number"
             },
             "alcohol_100g": {
-              "type": "integer"
+              "type": "number"
             },
             "alcohol_serving": {
-              "type": "integer"
+              "type": "number"
             },
             "alcohol_unit": {
               "type": "string"
             },
             "alcohol_value": {
-              "type": "integer"
+              "type": "number"
             },
             "carbohydrates": {
               "type": "number"
@@ -8140,19 +8140,19 @@
               "type": "number"
             },
             "carbon-footprint-from-known-ingredients_product": {
-              "type": "integer"
+              "type": "number"
             },
             "carbon-footprint-from-known-ingredients_serving": {
               "type": "number"
             },
             "energy": {
-              "type": "integer"
+              "type": "number"
             },
             "energy-kcal": {
-              "type": "integer"
+              "type": "number"
             },
             "energy-kcal_100g": {
-              "type": "integer"
+              "type": "number"
             },
             "energy-kcal_serving": {
               "type": "number"
@@ -8164,28 +8164,28 @@
             "energy-kcal_value": {
               "description": "The standardized value of a serving of 100g \n(or 100ml for liquids) for energy expressed in kcal.\n",
               "example": 190,
-              "type": "integer"
+              "type": "number"
             },
             "energy-kj": {
-              "type": "integer"
+              "type": "number"
             },
             "energy-kj_100g": {
-              "type": "integer"
+              "type": "number"
             },
             "energy-kj_serving": {
-              "type": "integer"
+              "type": "number"
             },
             "energy-kj_unit": {
               "type": "string"
             },
             "energy-kj_value": {
-              "type": "integer"
+              "type": "number"
             },
             "energy_100g": {
-              "type": "integer"
+              "type": "number"
             },
             "energy_serving": {
-              "type": "integer"
+              "type": "number"
             },
             "energy_unit": {
               "description": "The unit used in the energy_value field \n(example in JSON: “energy_unit”: “kJ”). \nPossible values are “kJ” or “kcal”.'\n",
@@ -8194,7 +8194,7 @@
             "energy_value": {
               "description": "The standardized value of a serving of 100g \n(or 100ml for liquids) for energy expressed in \nthe unit specified in the field energy_unit.\n",
               "example": 190,
-              "type": "integer"
+              "type": "number"
             },
             "fat": {
               "type": "number"
@@ -8212,26 +8212,26 @@
               "type": "number"
             },
             "fruits-vegetables-nuts-estimate-from-ingredients_100g": {
-              "type": "integer"
+              "type": "number"
             },
             "fruits-vegetables-nuts-estimate-from-ingredients_serving": {
-              "type": "integer"
+              "type": "number"
             },
             "nova-group": {
-              "type": "integer"
+              "type": "number"
             },
             "nova-group_100g": {
-              "type": "integer"
+              "type": "number"
             },
             "nova-group_serving": {
-              "type": "integer"
+              "type": "number"
             },
             "nutrition-score-fr": {
-              "type": "integer"
+              "type": "number"
             },
             "nutrition-score-fr_100g": {
               "description": "Experimental nutrition score derived from \nthe UK FSA score and adapted for the French market \n(formula defined by the team of Professor Hercberg).\n",
-              "type": "integer"
+              "type": "number"
             },
             "proteins": {
               "type": "number"
@@ -8314,58 +8314,58 @@
         "nutriscore_data": {
           "properties": {
             "energy": {
-              "type": "integer"
+              "type": "number"
             },
             "energy_points": {
-              "type": "integer"
+              "type": "number"
             },
             "energy_value": {
-              "type": "integer"
+              "type": "number"
             },
             "fiber": {
-              "type": "integer"
+              "type": "number"
             },
             "fiber_points": {
-              "type": "integer"
+              "type": "number"
             },
             "fiber_value": {
-              "type": "integer"
+              "type": "number"
             },
             "fruits_vegetables_nuts_colza_walnut_olive_oils": {
-              "type": "integer"
+              "type": "number"
             },
             "fruits_vegetables_nuts_colza_walnut_olive_oils_points": {
-              "type": "integer"
+              "type": "number"
             },
             "fruits_vegetables_nuts_colza_walnut_olive_oils_value": {
-              "type": "integer"
+              "type": "number"
             },
             "grade": {
               "type": "string"
             },
             "is_beverage": {
-              "type": "integer"
+              "type": "number"
             },
             "is_cheese": {
-              "type": "integer"
+              "type": "number"
             },
             "is_fat": {
-              "type": "integer"
+              "type": "number"
             },
             "is_water": {
-              "type": "integer"
+              "type": "number"
             },
             "negative_points": {
-              "type": "integer"
+              "type": "number"
             },
             "positive_points": {
-              "type": "integer"
+              "type": "number"
             },
             "proteins": {
               "type": "number"
             },
             "proteins_points": {
-              "type": "integer"
+              "type": "number"
             },
             "proteins_value": {
               "type": "number"
@@ -8374,13 +8374,13 @@
               "type": "number"
             },
             "saturated_fat_points": {
-              "type": "integer"
+              "type": "number"
             },
             "saturated_fat_ratio": {
               "type": "number"
             },
             "saturated_fat_ratio_points": {
-              "type": "integer"
+              "type": "number"
             },
             "saturated_fat_ratio_value": {
               "type": "number"
@@ -8389,13 +8389,13 @@
               "type": "number"
             },
             "score": {
-              "type": "integer"
+              "type": "number"
             },
             "sodium": {
               "type": "number"
             },
             "sodium_points": {
-              "type": "integer"
+              "type": "number"
             },
             "sodium_value": {
               "type": "number"
@@ -8404,7 +8404,7 @@
               "type": "number"
             },
             "sugars_points": {
-              "type": "integer"
+              "type": "number"
             },
             "sugars_value": {
               "type": "number"
@@ -8416,10 +8416,10 @@
           "type": "string"
         },
         "nutriscore_score": {
-          "type": "integer"
+          "type": "number"
         },
         "nutriscore_score_opposite": {
-          "type": "integer"
+          "type": "number"
         },
         "nutrition_data": {
           "type": "string"
@@ -8450,16 +8450,16 @@
           "type": "array"
         },
         "nutrition_score_beverage": {
-          "type": "integer"
+          "type": "number"
         },
         "nutrition_score_warning_fruits_vegetables_nuts_estimate_from_ingredients": {
-          "type": "integer"
+          "type": "number"
         },
         "nutrition_score_warning_fruits_vegetables_nuts_estimate_from_ingredients_value": {
-          "type": "integer"
+          "type": "number"
         },
         "nutrition_score_warning_no_fiber": {
-          "type": "integer"
+          "type": "number"
         },
         "obsolete": {
           "type": "string"
@@ -8508,93 +8508,93 @@
         "owner_fields": {
           "properties": {
             "abbreviated_product_name_fr": {
-              "type": "integer"
+              "type": "number"
             },
             "allergens": {
-              "type": "integer"
+              "type": "number"
             },
             "brands": {
-              "type": "integer"
+              "type": "number"
             },
             "carbohydrates": {
-              "type": "integer"
+              "type": "number"
             },
             "conservation_conditions_fr": {
-              "type": "integer"
+              "type": "number"
             },
             "countries": {
-              "type": "integer"
+              "type": "number"
             },
             "customer_service_fr": {
-              "type": "integer"
+              "type": "number"
             },
             "data_sources": {
-              "type": "integer"
+              "type": "number"
             },
             "energy": {
-              "type": "integer"
+              "type": "number"
             },
             "energy-kcal": {
-              "type": "integer"
+              "type": "number"
             },
             "energy-kj": {
-              "type": "integer"
+              "type": "number"
             },
             "fat": {
-              "type": "integer"
+              "type": "number"
             },
             "generic_name_fr": {
-              "type": "integer"
+              "type": "number"
             },
             "ingredients_text_fr": {
-              "type": "integer"
+              "type": "number"
             },
             "lang": {
-              "type": "integer"
+              "type": "number"
             },
             "lc": {
-              "type": "integer"
+              "type": "number"
             },
             "no_nutrition_data": {
-              "type": "integer"
+              "type": "number"
             },
             "nutrition_data_per": {
-              "type": "integer"
+              "type": "number"
             },
             "obsolete": {
-              "type": "integer"
+              "type": "number"
             },
             "owner": {
-              "type": "integer"
+              "type": "number"
             },
             "packaging": {
               "description": "shape, material.\n",
               "example": "Cardboard",
-              "type": "integer"
+              "type": "number"
             },
             "producer_version_id": {
-              "type": "integer"
+              "type": "number"
             },
             "product_name_fr": {
-              "type": "integer"
+              "type": "number"
             },
             "proteins": {
-              "type": "integer"
+              "type": "number"
             },
             "quantity": {
-              "type": "integer"
+              "type": "number"
             },
             "salt": {
-              "type": "integer"
+              "type": "number"
             },
             "saturated-fat": {
-              "type": "integer"
+              "type": "number"
             },
             "serving_size": {
-              "type": "integer"
+              "type": "number"
             },
             "sugars": {
-              "type": "integer"
+              "type": "number"
             }
           },
           "type": "object"
@@ -8671,7 +8671,7 @@
           "type": "array"
         },
         "popularity_key": {
-          "type": "integer"
+          "type": "number"
         },
         "popularity_tags": {
           "items": {
@@ -8721,10 +8721,10 @@
           "type": "array"
         },
         "rev": {
-          "type": "integer"
+          "type": "number"
         },
         "scans_n": {
-          "type": "integer"
+          "type": "number"
         },
         "scores": {
           "type": "object"
@@ -8915,7 +8915,7 @@
           "type": "string"
         },
         "sortkey": {
-          "type": "integer"
+          "type": "number"
         },
         "sources": {
           "items": {
@@ -8936,11 +8936,11 @@
                 "type": "array"
               },
               "import_t": {
-                "type": "integer"
+                "type": "number"
               },
               "manufacturer": {
                 "type": [
-                  "integer",
+                  "number",
                   "string"
                 ]
               },
@@ -9059,10 +9059,10 @@
           "type": "array"
         },
         "unique_scans_n": {
-          "type": "integer"
+          "type": "number"
         },
         "unknown_ingredients_n": {
-          "type": "integer"
+          "type": "number"
         },
         "unknown_nutrients_tags": {
           "items": {
@@ -9114,19 +9114,19 @@
       "properties": {
         "count": {
           "example": 2701,
-          "type": "integer"
+          "type": "number"
         },
         "page": {
           "example": 1,
-          "type": "integer"
+          "type": "number"
         },
         "page_count": {
           "example": 24,
-          "type": "integer"
+          "type": "number"
         },
         "page_size": {
           "example": 24,
-          "type": "integer"
+          "type": "number"
         },
         "products": {
           "items": {
@@ -9136,7 +9136,7 @@
         },
         "skip": {
           "example": 0,
-          "type": "integer"
+          "type": "number"
         }
       },
       "type": "object"
