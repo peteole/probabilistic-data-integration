@@ -11,7 +11,7 @@ mod tests {
 
     use crate::{
         datasource::MockDataSource,
-        datasources::openFoodFacts::OpenFoodFactsDataSource,
+        datasources::open_food_facts::OpenFoodFactsDataSource,
         search_engine::{Field, FieldType, FieldValue, SearchEngine},
     };
 

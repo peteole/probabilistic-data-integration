@@ -38,7 +38,7 @@ impl StringFieldValue {
         }
         panic!("Not implemented");
         //now only distributions are left
-        let mut result = HashMap::new();
+        let result = HashMap::new();
         for val in v {
             match val {
                 StringFieldValue::Exact(s) => {

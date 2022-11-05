@@ -4,7 +4,7 @@ use async_trait::async_trait;
 use openapi::apis::configuration::Configuration;
 
 use crate::{
-    datasource::DataSource, numeric::NumericFieldValue, search_engine::FieldValue,
+    datasource::DataSource, numeric::NumericFieldValue,
     search_result::SearchResult,
 };
 

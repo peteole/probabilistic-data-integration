@@ -73,7 +73,7 @@ impl NumericFieldValue {
     pub fn sigma(&self) -> f64 {
         match self {
             NumericFieldValue::Normal { sigma, mean: _ } => *sigma,
-            NumericFieldValue::Exact(v) => 0.0,
+            NumericFieldValue::Exact(_) => 0.0,
             NumericFieldValue::Uniform { min, max } => (max - min) / 12.0,
             NumericFieldValue::Combination {
                 components,

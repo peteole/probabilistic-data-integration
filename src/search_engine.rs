@@ -36,33 +36,31 @@ pub struct SearchResponse {
 }
 
 impl SearchEngine {
-    pub fn verify(&self, result: &SearchResult) -> Result<(), String> {
+    pub fn verify(&self, result: &SearchResult) -> SearchResult{
         // Check that all fields in result are known and of correct type
+        let mut cloned_result = result.clone();
         for (key, _) in &result.numeric_fields {
             if let Some(field) = self.search_fields.get(key) {
                 match field.field_type {
                     FieldType::Float { .. } => {}
                     _ => {
-                        return Err(format!(
-                            "Field {} is of type {:?}, but got numeric value",
-                            key, field.field_type
-                        ))
+                        cloned_result.numeric_fields.remove(key);
                     }
                 }
             } else {
-                return Err(format!("Field {} is not known", key));
+                cloned_result.numeric_fields.remove(key);
             }
         }
         for (key, _) in &result.string_fields {
             if let Some(field) = self.search_fields.get(key) {
                 if field.field_type != FieldType::String {
-                    return Err(format!("Field {} is not of type String", key));
+                    cloned_result.string_fields.remove(key);
                 }
             } else {
-                return Err(format!("Field {} is not known", key));
+                  cloned_result.string_fields.remove(key);  
             }
         }
-        Ok(())
+        cloned_result
     }
     pub async fn search(&self, query: String) -> SearchResponse {
         let futures = self
@@ -73,10 +71,7 @@ impl SearchEngine {
         let filtered_results: Vec<SearchResult> = results
             .into_iter()
             .filter_map(|r| r)
-            .filter(|r| match self.verify(r) {
-                Ok(_) => true,
-                Err(_) => false,
-            })
+            .map(|r| self.verify(&r))
             .collect();
         let merged = SearchResult::merge(&filtered_results);
 

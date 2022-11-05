@@ -1,1 +1,1 @@
-pub mod openFoodFacts;
+pub mod open_food_facts;
