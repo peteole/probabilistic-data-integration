@@ -1,0 +1,52 @@
+syntax = "proto3";
+package datasource;
+
+service DataSource {
+    rpc search (SearchRequest) returns (SearchResult);
+}
+
+message SearchRequest{
+    string query = 1;
+}
+
+
+message Exact{
+    float value = 1;
+}
+message Uniform{
+    float min = 1;
+    float max = 2;
+}
+message Normal{
+    float mean = 1;
+    float sigma = 2;
+}
+
+message Combination{
+    repeated NumericFieldValue values = 1;
+    float scaling_factor=2;
+}
+
+message NumericFieldValue{
+    oneof value{ 
+        Exact exact=1;
+        Uniform uniform=2;
+        Normal normal=3;
+        Combination combination=4;
+    }
+}
+message Distribution{
+    map<string,float> values = 1;
+}
+
+message StringFieldValue{
+    oneof value{
+        string exact=1;
+        Distribution distribution=2;
+    }
+}
+
+message SearchResult{
+    map<string,NumericFieldValue> numeric_fields = 1;
+    map<string,StringFieldValue> string_fields = 2;
+}

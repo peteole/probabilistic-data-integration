@@ -3,10 +3,7 @@ use std::collections::HashMap;
 use async_trait::async_trait;
 use openapi::apis::configuration::Configuration;
 
-use crate::{
-    datasource::DataSource, numeric::NumericFieldValue,
-    search_result::SearchResult,
-};
+use crate::{datasource::DataSource, numeric::NumericFieldValue, search_result::SearchResult};
 
 pub struct OpenFoodFactsDataSource {
     config: Configuration,
@@ -59,7 +56,10 @@ impl DataSource for OpenFoodFactsDataSource {
 impl Default for OpenFoodFactsDataSource {
     fn default() -> Self {
         Self {
-            config: Configuration::default(),
+            config: Configuration {
+                base_path: "https://world.openfoodfacts.org".to_owned(),
+                ..Configuration::default()
+            },
         }
     }
 }
