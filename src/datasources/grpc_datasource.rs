@@ -62,32 +62,42 @@ pub struct GrpcDataSource {
 #[async_trait]
 impl DataSource for GrpcDataSource {
     async fn search(&self, query: String) -> Option<SearchResult> {
-        let response = self
+        let response = match self
             .client
             .clone()
             .search(grpc_ds::SearchRequest { query })
             .await
-            .ok()
-            .unwrap();
+        {
+            Ok(r) => r,
+            Err(_) => return None,
+        };
         let result = response.into_inner();
         Some(SearchResult {
             numeric_fields: result
                 .numeric_fields
                 .into_iter()
-                .map(|v| (v.0, convert_numeric_field_value(v.1.value.unwrap())))
+                .filter_map(|v| {
+                    v.1.value
+                        .map(|n_value| (v.0, convert_numeric_field_value(n_value)))
+                })
                 .collect(),
             string_fields: result
                 .string_fields
                 .into_iter()
-                .map(|v| (v.0, convert_string_field_value(v.1.value.unwrap())))
+                .filter_map(|v| {
+                    v.1.value
+                        .map(|s_value| (v.0, convert_string_field_value(s_value)))
+                })
                 .collect(),
         })
     }
 }
 
-impl GrpcDataSource{
+impl GrpcDataSource {
     pub async fn new(address: String) -> Self {
-        let client = grpc_ds::data_source_client::DataSourceClient::connect(address).await.unwrap();
+        let client = grpc_ds::data_source_client::DataSourceClient::connect(address)
+            .await
+            .unwrap();
         Self { client }
     }
 }

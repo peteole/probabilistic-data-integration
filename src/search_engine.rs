@@ -36,7 +36,7 @@ pub struct SearchResponse {
 }
 
 impl SearchEngine {
-    pub fn verify(&self, result: &SearchResult) -> SearchResult{
+    pub fn verify(&self, result: &SearchResult) -> SearchResult {
         // Check that all fields in result are known and of correct type
         let mut cloned_result = result.clone();
         for (key, _) in &result.numeric_fields {
@@ -57,7 +57,7 @@ impl SearchEngine {
                     cloned_result.string_fields.remove(key);
                 }
             } else {
-                  cloned_result.string_fields.remove(key);  
+                cloned_result.string_fields.remove(key);
             }
         }
         cloned_result
@@ -79,23 +79,15 @@ impl SearchEngine {
             fields: merged
                 .numeric_fields
                 .into_iter()
-                .map(|(k, v)| {
-                    (
-                        k.clone(),
-                        (
-                            self.search_fields.get(&k).unwrap().clone(),
-                            FieldValue::Numeric(v),
-                        ),
-                    )
+                .filter_map(|(k, v)| {
+                    self.search_fields
+                        .get(&k)
+                        .map(|field| (k.clone(), (field.clone(), FieldValue::Numeric(v))))
                 })
-                .chain(merged.string_fields.into_iter().map(|(k, v)| {
-                    (
-                        k.clone(),
-                        (
-                            self.search_fields.get(&k).unwrap().clone(),
-                            FieldValue::String(v),
-                        ),
-                    )
+                .chain(merged.string_fields.into_iter().filter_map(|(k, v)| {
+                    self.search_fields
+                        .get(&k)
+                        .map(|field| (k.clone(), (field.clone(), FieldValue::String(v))))
                 }))
                 .collect(),
         }
