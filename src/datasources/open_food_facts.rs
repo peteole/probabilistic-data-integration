@@ -26,7 +26,10 @@ impl DataSource for OpenFoodFactsDataSource {
                 //println!("{:?}", res);
                 match res.products {
                     Some(products) => {
-                        let product = products.first().unwrap().clone();
+                        let product = match products.first() {
+                            Some(p) => p.clone(),
+                            None => return None,
+                        };
                         if let Some(energy) = product.nutriments?.energy {
                             return Some(SearchResult {
                                 numeric_fields: HashMap::from([(

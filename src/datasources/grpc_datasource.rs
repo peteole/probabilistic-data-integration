@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use async_trait::async_trait;
+use tonic::codegen::StdError;
 
 use crate::{datasource::DataSource, numeric::NumericFieldValue, search_result::SearchResult};
 
@@ -47,7 +48,7 @@ pub fn convert_numeric_field_value(
                 components: v
                     .values
                     .into_iter()
-                    .map(|v| convert_numeric_field_value(v.value.unwrap()))
+                    .filter_map(|v| v.value.map(convert_numeric_field_value))
                     .collect(),
                 scaling_factor: v.scaling_factor.into(),
             }
@@ -94,10 +95,8 @@ impl DataSource for GrpcDataSource {
 }
 
 impl GrpcDataSource {
-    pub async fn new(address: String) -> Self {
-        let client = grpc_ds::data_source_client::DataSourceClient::connect(address)
-            .await
-            .unwrap();
-        Self { client }
+    pub async fn new(address: String) -> Result<Self, tonic::transport::Error> {
+        let client = grpc_ds::data_source_client::DataSourceClient::connect(address).await;
+        client.map(|c| GrpcDataSource { client: c })
     }
 }
