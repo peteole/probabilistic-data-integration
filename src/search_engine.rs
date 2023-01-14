@@ -1,4 +1,5 @@
 use futures::future::join_all;
+use serde::Deserialize;
 use std::collections::HashMap;
 
 use crate::{
@@ -6,13 +7,13 @@ use crate::{
     string::StringFieldValue,
 };
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Deserialize)]
 pub enum FieldType {
     String,
     Float { unit: String },
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Field {
     pub description: String,
     pub field_type: FieldType,

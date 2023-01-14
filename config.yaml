@@ -1,0 +1,11 @@
+fields:
+  # color:
+  #   description: Color of the object
+  #   field_type: String
+  weight:
+    description: Weight of the object
+    field_type:
+      Float:
+        unit: kg
+data_sources:
+  - Mock1

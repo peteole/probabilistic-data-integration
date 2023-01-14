@@ -21,7 +21,7 @@ mod tests {
             data_sources: vec![
                 Box::new(MockDataSource::demo1()),
                 Box::new(MockDataSource::demo2()),
-                Box::new(OpenFoodFactsDataSource::default()),
+                //Box::new(OpenFoodFactsDataSource::default()),
             ],
             search_fields: HashMap::from([
                 (
@@ -46,6 +46,13 @@ mod tests {
                     "color".to_string(),
                     Field {
                         description: "Color of the object".to_string(),
+                        field_type: FieldType::String,
+                    },
+                ),
+                (
+                    "origin".into(),
+                    Field {
+                        description: "Origin of production as lowercase two-letter-code".into(),
                         field_type: FieldType::String,
                     },
                 ),

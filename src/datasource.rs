@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap};
 
 use async_trait::async_trait;
 
@@ -37,6 +37,16 @@ impl MockDataSource {
                     ]),
                     string_fields: HashMap::from([
                         ("color".into(), StringFieldValue::Exact("red".to_string())),
+                        ("origin".into(),StringFieldValue::Distribution(HashMap::from([
+                            (
+                                "de".into(),
+                                0.4
+                            ),
+                            (
+                                "fr".into(),
+                                0.6
+                            )
+                        ])))
                     ]),
                 },
             )]),
@@ -60,6 +70,7 @@ impl MockDataSource {
                     ]),
                     string_fields: HashMap::from([
                         ("color".into(), StringFieldValue::Exact("red".to_string())),
+                        ("origin".into(), StringFieldValue::Exact("de".to_string())),
                     ]),
                 },
             )]),

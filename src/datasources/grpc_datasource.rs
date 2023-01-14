@@ -1,9 +1,6 @@
-use std::collections::HashMap;
-
 use async_trait::async_trait;
-use tonic::codegen::StdError;
 
-use crate::{datasource::DataSource, numeric::NumericFieldValue, search_result::SearchResult};
+use crate::{datasource::DataSource, search_result::SearchResult};
 
 pub mod grpc_ds {
     tonic::include_proto!("datasource");
