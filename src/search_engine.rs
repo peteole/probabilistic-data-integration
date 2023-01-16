@@ -27,7 +27,7 @@ pub enum FieldValue {
 
 pub struct SearchEngine {
     pub search_fields: HashMap<String, Field>,
-    pub data_sources: Vec<Box<dyn DataSource>>,
+    pub data_sources: Vec<Box<dyn DataSource+Sync+Send>>,
 }
 
 #[derive(Debug, Clone)]

@@ -6,9 +6,15 @@ pub mod search_engine_config;
 pub mod search_result;
 pub mod string;
 use std::path::PathBuf;
+pub mod graphql;
+use async_graphql_poem::GraphQL;
+use poem::{get, listener::TcpListener, Route, Server};
 
 use clap::Parser;
+use graphql::get_schema;
 use search_engine_config::Config;
+
+use crate::graphql::graphiql;
 
 /// Data integration engine
 #[derive(Parser, Debug)]
@@ -33,4 +39,13 @@ async fn main() {
     let engine = configuration.to_search_engine().await;
     let result = engine.search("apple".to_string()).await;
     println!("{:?}", result);
+
+    let schema = get_schema(engine);
+    let app = Route::new().at("/", get(graphiql).post(GraphQL::new(schema.unwrap())));
+
+    println!("GraphiQL IDE: http://localhost:8000");
+    Server::new(TcpListener::bind("127.0.0.1:8000"))
+        .run(app)
+        .await
+        .unwrap();
 }
