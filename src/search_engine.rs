@@ -25,8 +25,9 @@ pub enum FieldValue {
     Numeric(NumericFieldValue),
 }
 
+pub type SearchFields=HashMap<String, Field>;
 pub struct SearchEngine {
-    pub search_fields: HashMap<String, Field>,
+    pub search_fields: SearchFields,
     pub data_sources: Vec<Box<dyn DataSource+Sync+Send>>,
 }
 
