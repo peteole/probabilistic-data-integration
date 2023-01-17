@@ -11,32 +11,31 @@ pub async fn graphiql() -> impl IntoResponse {
 use async_graphql::{dynamic::*, Value};
 use tag_search::{search_engine::SearchEngine, search_result::SearchResult};
 
-pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
-    let root_builder = Object::new("Query");
-    let search_result_builder = Object::new("SearchResult");
+pub fn get_schema(search_engine: &'static SearchEngine) -> Result<Schema, SchemaError> {
+    let mut search_result_builder = Object::new("SearchResult");
     for (field_name, field) in search_engine.search_fields.iter() {
-        match field.field_type {
+        match field.field_type.clone() {
             tag_search::search_engine::FieldType::Float { unit } => {
-                search_result_builder.field(Field::new(
-                    field_name,
+                search_result_builder = search_result_builder.field(Field::new(
+                    field_name.clone(),
                     TypeRef::named_nn(TypeRef::FLOAT),
-                    |ctx| {
+                    move |ctx| {
                         FieldFuture::new(async move {
                             let data = ctx.parent_value.try_downcast_ref::<SearchResult>()?;
-                            let result = data.numeric_fields.get(field_name);
+                            let result = data.numeric_fields.get(&field_name as &str);
                             Ok(result.map(|r| Value::from(r.mean())))
                         })
                     },
                 ));
             }
             tag_search::search_engine::FieldType::String => {
-                search_result_builder.field(Field::new(
-                    field_name,
+                search_result_builder = search_result_builder.field(Field::new(
+                    field_name.clone(),
                     TypeRef::named_nn(TypeRef::STRING),
-                    |ctx| {
+                    move |ctx| {
                         FieldFuture::new(async move {
                             let data = ctx.parent_value.try_downcast_ref::<SearchResult>()?;
-                            let result = data.string_fields.get(field_name);
+                            let result = data.string_fields.get(&field_name as &str);
                             match result {
                                 Some(r) => match r {
                                     tag_search::string::StringFieldValue::Exact(e) => {
@@ -56,19 +55,21 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
             }
         }
     }
-    root_builder.field(
+
+    let root_builder = Object::new("Query").field(
         Field::new(
             "search",
             TypeRef::named_nn(search_result_builder.type_name()),
-            |ctx| {
-                let query = ctx.args.get("query");
+            move |ctx| {
                 FieldFuture::new(async move {
-                    match query.map(|a| a.string().ok()).flatten() {
-                        Some(q) => {
-                            let result = search_engine.search(q.into()).await;
-                            Ok(Some(FieldValue::borrowed_any(&result)))
+                    let query = ctx.args.try_get("query")?;
+                    match query.string() {
+                        Ok(q) => {
+                            let cloned=q.to_owned();
+                            let result = search_engine.search(cloned.into()).await;
+                            Ok(Some(FieldValue::boxed_any(Box::new(result))))
                         }
-                        None => Err(async_graphql::Error::new("")),
+                        Err(_) => Err(async_graphql::Error::new("")),
                     }
                 })
             },

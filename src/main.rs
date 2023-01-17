@@ -13,6 +13,7 @@ use poem::{get, listener::TcpListener, Route, Server};
 use clap::Parser;
 use graphql::get_schema;
 use search_engine_config::Config;
+use tag_search::search_engine::SearchEngine;
 
 use crate::graphql::graphiql;
 
@@ -40,7 +41,7 @@ async fn main() {
     let result = engine.search("apple".to_string()).await;
     println!("{:?}", result);
 
-    let schema = get_schema(engine);
+    let schema = get_schema(todo!());
     let app = Route::new().at("/", get(graphiql).post(GraphQL::new(schema.unwrap())));
 
     println!("GraphiQL IDE: http://localhost:8000");
