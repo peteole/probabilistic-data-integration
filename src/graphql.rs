@@ -137,7 +137,7 @@ where
     .description(field_getter.description)
 }
 pub fn get_numeric_field_value() -> Object {
-    let TYPENAME="NumericFieldValue";
+    let TYPENAME = "NumericFieldValue";
     Object::new(TYPENAME)
         .description("Distribution over a numeric field")
         .field(numeric_value_field(NumericFieldGetter {
@@ -191,16 +191,42 @@ pub fn get_numeric_field_value() -> Object {
             description: "Minimum value of uniform distribution if it is a uniform distribution, null else",
         }))
         .field(
-            Field::new("components", TypeRef::named_nn_list(TYPENAME), |ctx|{
+            Field::new("combination_components", TypeRef::named_nn_list(TYPENAME), |ctx|{
                 FieldFuture::new(async move{
                     let data = ctx.parent_value.try_downcast_ref::<NumericFieldValue>()?;
                     match data{
-                        NumericFieldValue::Combination { components, scaling_factor } => {
+                        NumericFieldValue::Combination { components, scaling_factor:_ } => {
                             Ok(Some(FieldValue::list(components.iter().map(|c|FieldValue::borrowed_any(c)))))
                         },
                         _=>Ok(None),
                     }
                 })
             })
+            .description("Combination field values if the distribution is a combination of several other field values.")
+        )
+        .field(numeric_value_field(NumericFieldGetter {
+            name: "combination_scaling_factor",
+            reducer: |nfv: NumericFieldValue| match nfv {
+                NumericFieldValue::Combination { scaling_factor,components:_} => Some(scaling_factor),
+                _ => None,
+            },
+            description: "Inverse of integral of the product of all component probabilities.",
+        }))
+        .field(Field::new(
+            "probability_density",
+            TypeRef::named_nn_list_nn(TypeRef::FLOAT),
+            move |ctx| {
+                FieldFuture::new(async move {
+                    let data = ctx.parent_value.try_downcast_ref::<NumericFieldValue>()?;
+                    let query = ctx.args.try_get("x")?;
+                    let list=query.list()?;
+                    let y = list.iter().filter_map(|x|x.f64().ok()).
+                        map(|x|data.get_value(x)).map(Value::from);
+                    Ok(Some(FieldValue::list(y)))
+                })
+            },
+        )
+        .argument(InputValue::new("x",TypeRef::named_nn_list_nn(TypeRef::FLOAT)).description("Location to calculate probability density at"))
+        .description("probability density at the given values")
         )
 }
