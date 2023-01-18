@@ -1,7 +1,8 @@
 use std::f64::NAN;
 
 use peroxide::{fuga::Integral::*, numerical::integral::*};
-#[derive(Debug, Clone)]
+use serde::{Serialize, Deserialize};
+#[derive(Debug, Clone,Serialize,Deserialize)]
 pub enum NumericFieldValue {
     Normal {
         sigma: f64,
@@ -19,6 +20,7 @@ pub enum NumericFieldValue {
     Error,
 }
 
+async_graphql::scalar!(NumericFieldValue);
 #[derive(Debug, Clone)]
 pub struct DistributionPlot {
     pub x: Vec<f64>,

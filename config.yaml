@@ -7,6 +7,11 @@ fields:
     field_type:
       Float:
         unit: kg
+  energy_density:
+    description: Calories of food
+    field_type:
+      Float:
+        unit: KJ/kg
 data_sources:
   - Mock1
   - Mock2
