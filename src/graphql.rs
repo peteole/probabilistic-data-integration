@@ -13,8 +13,30 @@ use tag_search::{
     numeric::NumericFieldValue,
     search_engine::{SearchEngine, SearchResponse},
 };
+type KeyValuePair = (String, f64);
 
 pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
+    let key_value_pair = Object::new("KeyValuePair")
+        .field(Field::new(
+            "key",
+            TypeRef::named_nn(TypeRef::STRING),
+            |ctx| {
+                FieldFuture::new(async move {
+                    let data = ctx.parent_value.try_downcast_ref::<KeyValuePair>()?;
+                    Ok(Some(Value::from(data.0.clone())))
+                })
+            },
+        ))
+        .field(Field::new(
+            "value",
+            TypeRef::named_nn(TypeRef::FLOAT),
+            |ctx| {
+                FieldFuture::new(async move {
+                    let data = ctx.parent_value.try_downcast_ref::<KeyValuePair>()?;
+                    Ok(Some(Value::from(data.1)))
+                })
+            },
+        ));
     let gql_numeric_field_value = get_numeric_field_value();
     let mut search_result_builder = Object::new("SearchResult");
     for (field_name, field) in search_engine.search_fields.iter() {
@@ -52,7 +74,7 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
             tag_search::search_engine::FieldType::String => {
                 search_result_builder = search_result_builder.field(Field::new(
                     field_name.clone(),
-                    TypeRef::named_nn(TypeRef::STRING),
+                    TypeRef::named_nn_list_nn(key_value_pair.type_name()),
                     move |ctx| {
                         let field_name = field_name.clone();
                         FieldFuture::new(async move {
@@ -66,12 +88,20 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
                                 tag_search::search_engine::FieldValue::String(s) => {
                                     return match s {
                                         tag_search::string::StringFieldValue::Exact(e) => {
-                                            return Ok(Some(Value::from(e.clone())));
+                                            return Ok(Some(FieldValue::list(vec![
+                                                FieldValue::boxed_any(Box::new((e.clone(), 1.0))),
+                                            ])));
                                         }
-                                        // tag_search::string::StringFieldValue::Distribution(r) => {
-                                        //     return Ok(Some(FieldValue::list(r.iter())));
-                                        // }
-                                        ,
+                                        tag_search::string::StringFieldValue::Distribution(r) => {
+                                            return Ok(Some(FieldValue::list(r.iter().map(
+                                                |(k, v)| {
+                                                    FieldValue::boxed_any(Box::new((
+                                                        k.clone(),
+                                                        v.clone(),
+                                                    )))
+                                                },
+                                            ))));
+                                        }
                                         _ => Ok(None),
                                     };
                                 }
@@ -109,6 +139,7 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
         .register(root_builder)
         .register(search_result_builder)
         .register(gql_numeric_field_value)
+        .register(key_value_pair)
         .data(search_engine)
         .finish();
     return schema;
@@ -137,7 +168,7 @@ where
     .description(field_getter.description)
 }
 pub fn get_numeric_field_value() -> Object {
-    let TYPENAME = "NumericFieldValue";
+    const TYPENAME: &str = "NumericFieldValue";
     Object::new(TYPENAME)
         .description("Distribution over a numeric field")
         .field(numeric_value_field(NumericFieldGetter {
