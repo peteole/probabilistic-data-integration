@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::{collections::HashMap, path::PathBuf};
 use tag_search::{
     datasource::{DataSource, MockDataSource},
     datasources::{grpc_datasource::GrpcDataSource, open_food_facts::OpenFoodFactsDataSource},
@@ -10,6 +10,7 @@ type FieldsConfig = HashMap<String, Field>;
 #[derive(Debug, Clone, Deserialize)]
 pub enum DataSourceConfig {
     OpenFoodFacts,
+    Mock { data_path: PathBuf },
     Mock1,
     Mock2,
     Grpc { address: String },
@@ -25,7 +26,7 @@ impl Config {
     pub async fn to_search_engine(self) -> SearchEngine {
         let mut new_ds = Vec::with_capacity(self.data_sources.len());
         for data_source in self.data_sources {
-            let m: Box<dyn DataSource+Sync+Send> = match data_source {
+            let m: Box<dyn DataSource + Sync + Send> = match data_source {
                 DataSourceConfig::OpenFoodFacts => Box::new(OpenFoodFactsDataSource::default()),
                 DataSourceConfig::Mock1 => Box::new(MockDataSource::demo1()),
                 DataSourceConfig::Mock2 => Box::new(MockDataSource::demo2()),
@@ -38,6 +39,9 @@ impl Config {
                             continue;
                         }
                     }
+                }
+                DataSourceConfig::Mock { data_path } => {
+                    Box::new(MockDataSource::load_from_file(data_path))
                 }
             };
             new_ds.push(m);

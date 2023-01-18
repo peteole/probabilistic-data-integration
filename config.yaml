@@ -15,3 +15,5 @@ fields:
 data_sources:
   - Mock1
   - Mock2
+  - Mock:
+      data_path: mock_data.yaml

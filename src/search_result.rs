@@ -1,8 +1,10 @@
 use std::collections::{HashMap, HashSet};
 
+use serde::Deserialize;
+
 use crate::{numeric::NumericFieldValue, string::StringFieldValue};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct SearchResult{
     /// Map from the field key to its value
     pub numeric_fields: HashMap<String, NumericFieldValue>,

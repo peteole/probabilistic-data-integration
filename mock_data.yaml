@@ -1,0 +1,9 @@
+data:
+  banana:
+    numeric_fields:
+      weight:
+        Exact:
+          0.2
+    string_fields:
+      color:
+        Exact: yellow

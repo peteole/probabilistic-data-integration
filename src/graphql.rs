@@ -47,16 +47,16 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
                 search_result_builder = search_result_builder.field(
                     Field::new(
                         field_name.clone(),
-                        TypeRef::named_nn("NumericFieldValue"),
+                        TypeRef::named("NumericFieldValue"),
                         move |ctx| {
                             let field_name = field_name.clone();
                             FieldFuture::new(async move {
                                 println!("field_name={}", field_name);
                                 let data = ctx.parent_value.try_downcast_ref::<SearchResponse>()?;
-                                let result = data
-                                    .fields
-                                    .get(&field_name as &str)
-                                    .ok_or("field not found")?;
+                                let result = match data.fields.get(&field_name as &str) {
+                                    Some(v) => v,
+                                    None => return Ok(None),
+                                };
                                 match &result.1 {
                                     tag_search::search_engine::FieldValue::String(s) => {
                                         return Ok(None)
@@ -74,15 +74,15 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
             tag_search::search_engine::FieldType::String => {
                 search_result_builder = search_result_builder.field(Field::new(
                     field_name.clone(),
-                    TypeRef::named_nn_list_nn(key_value_pair.type_name()),
+                    TypeRef::named_nn_list(key_value_pair.type_name()),
                     move |ctx| {
                         let field_name = field_name.clone();
                         FieldFuture::new(async move {
                             let data = ctx.parent_value.try_downcast_ref::<SearchResponse>()?;
-                            let result = data
-                                .fields
-                                .get(&field_name as &str)
-                                .ok_or("field not found")?;
+                            let result = match data.fields.get(&field_name as &str) {
+                                Some(v) => v,
+                                None => return Ok(None),
+                            };
 
                             match &result.1 {
                                 tag_search::search_engine::FieldValue::String(s) => {
