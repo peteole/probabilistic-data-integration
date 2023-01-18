@@ -11,8 +11,6 @@ type FieldsConfig = HashMap<String, Field>;
 pub enum DataSourceConfig {
     OpenFoodFacts,
     Mock { data_path: PathBuf },
-    Mock1,
-    Mock2,
     Grpc { address: String },
 }
 
@@ -28,8 +26,6 @@ impl Config {
         for data_source in self.data_sources {
             let m: Box<dyn DataSource + Sync + Send> = match data_source {
                 DataSourceConfig::OpenFoodFacts => Box::new(OpenFoodFactsDataSource::default()),
-                DataSourceConfig::Mock1 => Box::new(MockDataSource::demo1()),
-                DataSourceConfig::Mock2 => Box::new(MockDataSource::demo2()),
                 DataSourceConfig::Grpc { address } => {
                     let ds = GrpcDataSource::new(address).await;
                     match ds {

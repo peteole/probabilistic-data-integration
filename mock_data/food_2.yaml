@@ -1,0 +1,23 @@
+data:
+  banana:
+    numeric_fields:
+      weight:
+        Normal:
+          mean: 0.3
+          sigma: 0.2
+    string_fields:
+      color:
+        Distribution:
+          yellow: 0.5
+          green: 0.5
+  apple:
+    numeric_fields:
+      weight:
+        Normal:
+          mean: 0.15
+          sigma: 0.2
+    string_fields:
+      color:
+        Distribution:
+          green: 0.4
+          red: 0.6

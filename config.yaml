@@ -13,7 +13,7 @@ fields:
       Float:
         unit: KJ/kg
 data_sources:
-  - Mock1
-  - Mock2
   - Mock:
-      data_path: mock_data.yaml
+      data_path: mock_data/food_1.yaml
+  - Mock:
+      data_path: mock_data/food_2.yaml

@@ -72,21 +72,24 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
                 );
             }
             tag_search::search_engine::FieldType::String => {
-                search_result_builder = search_result_builder.field(Field::new(
-                    field_name.clone(),
-                    TypeRef::named_nn_list(key_value_pair.type_name()),
-                    move |ctx| {
-                        let field_name = field_name.clone();
-                        FieldFuture::new(async move {
-                            let data = ctx.parent_value.try_downcast_ref::<SearchResponse>()?;
-                            let result = match data.fields.get(&field_name as &str) {
-                                Some(v) => v,
-                                None => return Ok(None),
-                            };
+                search_result_builder =
+                    search_result_builder.field(
+                        Field::new(
+                            field_name.clone(),
+                            TypeRef::named_nn_list(key_value_pair.type_name()),
+                            move |ctx| {
+                                let field_name = field_name.clone();
+                                FieldFuture::new(async move {
+                                    let data =
+                                        ctx.parent_value.try_downcast_ref::<SearchResponse>()?;
+                                    let result = match data.fields.get(&field_name as &str) {
+                                        Some(v) => v,
+                                        None => return Ok(None),
+                                    };
 
-                            match &result.1 {
-                                tag_search::search_engine::FieldValue::String(s) => {
-                                    return match s {
+                                    match &result.1 {
+                                        tag_search::search_engine::FieldValue::String(s) => {
+                                            return match s {
                                         tag_search::string::StringFieldValue::Exact(e) => {
                                             return Ok(Some(FieldValue::list(vec![
                                                 FieldValue::boxed_any(Box::new((e.clone(), 1.0))),
@@ -104,12 +107,17 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
                                         }
                                         _ => Ok(None),
                                     };
-                                }
-                                _ => return Ok(None),
-                            };
-                        })
-                    },
-                ));
+                                        }
+                                        _ => return Ok(None),
+                                    };
+                                })
+                            },
+                        )
+                        .description(format!(
+                            "{}. Result is a distribution, mapping each key to a probability",
+                            field.description
+                        )),
+                    )
             }
         }
     }

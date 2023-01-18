@@ -1,0 +1,23 @@
+data:
+  banana:
+    numeric_fields:
+      weight:
+        Exact:
+          0.2
+    string_fields:
+      color:
+        Distribution:
+          yellow: 0.8
+          green: 0.2
+  apple:
+    numeric_fields:
+      weight:
+        Uniform:
+          min: 0.1
+          max: 0.5
+    string_fields:
+      color:
+        Distribution:
+          yellow: 0.1
+          green: 0.3
+          red: 0.6
