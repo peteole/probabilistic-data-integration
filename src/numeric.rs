@@ -1,8 +1,8 @@
 use std::f64::NAN;
 
 use peroxide::{fuga::Integral::*, numerical::integral::*};
-use serde::{Serialize, Deserialize};
-#[derive(Debug, Clone,Serialize,Deserialize)]
+use serde::{Deserialize, Serialize};
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum NumericFieldValue {
     Normal {
         sigma: f64,
@@ -16,6 +16,8 @@ pub enum NumericFieldValue {
     Combination {
         components: Vec<NumericFieldValue>,
         scaling_factor: f64,
+        mean: f64,
+        sigma: f64,
     },
     Error,
 }
@@ -31,7 +33,7 @@ impl NumericFieldValue {
     pub fn get_value(&self, x: f64) -> f64 {
         match self {
             NumericFieldValue::Normal { sigma, mean } => {
-                (1.0 / (sigma * 2.0 * std::f64::consts::PI).sqrt())
+                (1.0 / sigma / (2.0 * std::f64::consts::PI).sqrt())
                     * (-0.5 * ((x - mean) / sigma).powi(2)).exp()
             }
             NumericFieldValue::Exact(v) => {
@@ -51,11 +53,12 @@ impl NumericFieldValue {
             NumericFieldValue::Combination {
                 components,
                 scaling_factor,
+                ..
             } => {
                 let result: f64 = components.into_iter().map(|val| val.get_value(x)).product();
                 result * scaling_factor
             }
-            NumericFieldValue::Error => NAN,
+            NumericFieldValue::Error => f64::NAN,
         }
     }
 
@@ -64,11 +67,8 @@ impl NumericFieldValue {
             NumericFieldValue::Normal { sigma: _, mean } => *mean,
             NumericFieldValue::Exact(v) => *v,
             NumericFieldValue::Uniform { min, max } => (min + max) / 2.0,
-            NumericFieldValue::Combination {
-                components,
-                scaling_factor: _,
-            } => components.iter().map(|val| val.mean()).sum::<f64>() / (components.len() as f64),
-            NumericFieldValue::Error => NAN,
+            NumericFieldValue::Combination { mean, .. } => *mean,
+            NumericFieldValue::Error => f64::NAN,
         }
     }
 
@@ -77,10 +77,7 @@ impl NumericFieldValue {
             NumericFieldValue::Normal { sigma, mean: _ } => *sigma,
             NumericFieldValue::Exact(_) => 0.0,
             NumericFieldValue::Uniform { min, max } => (max - min) / 12.0,
-            NumericFieldValue::Combination {
-                components,
-                scaling_factor: _,
-            } => components.iter().map(|val| val.sigma()).sum::<f64>() / (components.len() as f64),
+            NumericFieldValue::Combination { mean, .. } => *mean,
             NumericFieldValue::Error => NAN,
         }
     }
@@ -103,17 +100,35 @@ impl NumericFieldValue {
             }
             return NumericFieldValue::Error;
         }
-        let mean = v.iter().map(|val| val.mean()).sum::<f64>() / (v.len() as f64);
-        let sigma = v.iter().map(|val| val.sigma()).sum::<f64>() / (v.len() as f64);
-        let range = (mean - 3.0 * sigma, mean + 3.0 * sigma);
+        let mean_approx = v.iter().map(|val| val.mean()).sum::<f64>() / (v.len() as f64);
+        let sigma_approx = v.iter().map(|val| val.sigma()).sum::<f64>() / (v.len() as f64);
+        let range = (
+            mean_approx - 3.0 * sigma_approx,
+            mean_approx + 3.0 * sigma_approx,
+        );
         let area = integrate(
             |x1| v.iter().map(|val| val.get_value(x1)).product(),
+            range,
+            G20K41(1.0e-3),
+        );
+        let mean = integrate(
+            |x1| x1 * v.iter().map(|val| val.get_value(x1)).product::<f64>() / area,
+            range,
+            G20K41(1.0e-3),
+        );
+        let variance = integrate(
+            |x1| {
+                (x1 - mean) * (x1 - mean) * v.iter().map(|val| val.get_value(x1)).product::<f64>()
+                    / area
+            },
             range,
             G20K41(1.0e-3),
         );
         return NumericFieldValue::Combination {
             components: v,
             scaling_factor: 1.0 / area,
+            mean: mean,
+            sigma: variance.sqrt(),
         };
     }
 

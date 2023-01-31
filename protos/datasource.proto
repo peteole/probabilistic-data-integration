@@ -25,6 +25,8 @@ message Normal{
 message Combination{
     repeated NumericFieldValue values = 1;
     float scaling_factor=2;
+    float mean = 3;
+    float sigma = 4;
 }
 
 message NumericFieldValue{

@@ -48,6 +48,8 @@ pub fn convert_numeric_field_value(
                     .filter_map(|v| v.value.map(convert_numeric_field_value))
                     .collect(),
                 scaling_factor: v.scaling_factor.into(),
+                mean: v.mean.into(),
+                sigma: v.sigma.into(),
             }
         }
     }

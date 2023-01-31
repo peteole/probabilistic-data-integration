@@ -51,7 +51,6 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
                         move |ctx| {
                             let field_name = field_name.clone();
                             FieldFuture::new(async move {
-                                println!("field_name={}", field_name);
                                 let data = ctx.parent_value.try_downcast_ref::<SearchResponse>()?;
                                 let result = match data.fields.get(&field_name as &str) {
                                     Some(v) => v,
@@ -234,7 +233,7 @@ pub fn get_numeric_field_value() -> Object {
                 FieldFuture::new(async move{
                     let data = ctx.parent_value.try_downcast_ref::<NumericFieldValue>()?;
                     match data{
-                        NumericFieldValue::Combination { components, scaling_factor:_ } => {
+                        NumericFieldValue::Combination { components, .. } => {
                             Ok(Some(FieldValue::list(components.iter().map(|c|FieldValue::borrowed_any(c)))))
                         },
                         _=>Ok(None),
@@ -246,7 +245,7 @@ pub fn get_numeric_field_value() -> Object {
         .field(numeric_value_field(NumericFieldGetter {
             name: "combination_scaling_factor",
             reducer: |nfv: NumericFieldValue| match nfv {
-                NumericFieldValue::Combination { scaling_factor,components:_} => Some(scaling_factor),
+                NumericFieldValue::Combination { scaling_factor,components:_, mean, sigma } => Some(scaling_factor),
                 _ => None,
             },
             description: "Inverse of integral of the product of all component probabilities.",
