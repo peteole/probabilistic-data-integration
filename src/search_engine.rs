@@ -1,5 +1,6 @@
 use futures::future::join_all;
-use serde::Deserialize;
+use poem_openapi::{Object, Enum, Union};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use crate::{
@@ -7,19 +8,19 @@ use crate::{
     string::StringFieldValue,
 };
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Deserialize, Serialize, Union)]
 pub enum FieldType {
-    String,
+    String{language: String},
     Float { unit: String },
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, Object)]
 pub struct Field {
     pub description: String,
     pub field_type: FieldType,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Union)]
 pub enum FieldValue {
     String(StringFieldValue),
     Numeric(NumericFieldValue),
@@ -31,7 +32,7 @@ pub struct SearchEngine {
     pub data_sources: Vec<Box<dyn DataSource+Sync+Send>>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct SearchResponse {
     /// Map from the field key to its value
     pub fields: HashMap<String, (Field, FieldValue)>,

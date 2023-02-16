@@ -5,6 +5,7 @@ pub mod search_engine;
 pub mod search_engine_config;
 pub mod search_result;
 pub mod string;
+pub mod http;
 use std::{ path::PathBuf};
 pub mod graphql;
 use async_graphql_poem::GraphQL;
@@ -38,8 +39,8 @@ async fn main() {
         .unwrap();
     println!("{:?}", configuration);
     let engine = configuration.to_search_engine().await;
-    let result = engine.search("apple".to_string()).await;
-    println!("{:?}", result);
+    // let result = engine.search("apple".to_string()).await;
+    // println!("{:?}", result);
 
     let schema = get_schema(engine).unwrap();
     let app = Route::new().at("/", get(graphiql).post(GraphQL::new(schema)));
