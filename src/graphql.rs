@@ -9,7 +9,7 @@ pub async fn graphiql() -> impl IntoResponse {
 }
 
 use async_graphql::{dynamic::*, Value};
-use tag_search::{
+use crate::{
     numeric::NumericFieldValue,
     search_engine::{SearchEngine, SearchResponse},
 };
@@ -43,7 +43,7 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
         let field_name = field_name.clone();
         let field = field.clone();
         match field.field_type.clone() {
-            tag_search::search_engine::FieldType::Float { unit } => {
+            crate::search_engine::FieldType::Float { unit } => {
                 search_result_builder = search_result_builder.field(
                     Field::new(
                         field_name.clone(),
@@ -57,10 +57,10 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
                                     None => return Ok(None),
                                 };
                                 match &result.1 {
-                                    tag_search::search_engine::FieldValue::String(s) => {
+                                    crate::search_engine::FieldValue::String(s) => {
                                         return Ok(None)
                                     }
-                                    tag_search::search_engine::FieldValue::Numeric(n) => {
+                                    crate::search_engine::FieldValue::Numeric(n) => {
                                         return Ok(Some(FieldValue::boxed_any(Box::new(n.clone()))))
                                     }
                                 };
@@ -70,7 +70,7 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
                     .description(format!("{} ({})", field.description, unit)),
                 );
             }
-            tag_search::search_engine::FieldType::String => {
+            crate::search_engine::FieldType::String => {
                 search_result_builder =
                     search_result_builder.field(
                         Field::new(
@@ -87,14 +87,14 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
                                     };
 
                                     match &result.1 {
-                                        tag_search::search_engine::FieldValue::String(s) => {
+                                        crate::search_engine::FieldValue::String(s) => {
                                             return match s {
-                                        tag_search::string::StringFieldValue::Exact(e) => {
+                                        crate::string::StringFieldValue::Exact(e) => {
                                             return Ok(Some(FieldValue::list(vec![
                                                 FieldValue::boxed_any(Box::new((e.clone(), 1.0))),
                                             ])));
                                         }
-                                        tag_search::string::StringFieldValue::Distribution(r) => {
+                                        crate::string::StringFieldValue::Distribution(r) => {
                                             return Ok(Some(FieldValue::list(r.iter().map(
                                                 |(k, v)| {
                                                     FieldValue::boxed_any(Box::new((

@@ -1,10 +1,13 @@
-use serde::Deserialize;
-use std::{collections::HashMap, path::PathBuf};
-use tag_search::{
-    datasource::{DataSource, MockDataSource},
-    datasources::{grpc_datasource::GrpcDataSource, open_food_facts::OpenFoodFactsDataSource},
+use crate::{
+    datasource::DataSource,
+    datasources::{
+        grpc_datasource::GrpcDataSource, mock_datasource::MockDataSource,
+        open_food_facts::OpenFoodFactsDataSource, rest_datasource::RestDatasource,
+    },
     search_engine::{Field, SearchEngine},
 };
+use serde::Deserialize;
+use std::{collections::HashMap, path::PathBuf};
 type FieldsConfig = HashMap<String, Field>;
 
 #[derive(Debug, Clone, Deserialize)]
@@ -12,6 +15,7 @@ pub enum DataSourceConfig {
     OpenFoodFacts,
     Mock { data_path: PathBuf },
     Grpc { address: String },
+    Rest { base_url: String },
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -39,6 +43,7 @@ impl Config {
                 DataSourceConfig::Mock { data_path } => {
                     Box::new(MockDataSource::load_from_file(data_path))
                 }
+                DataSourceConfig::Rest { base_url } => Box::new(RestDatasource::new(base_url)),
             };
             new_ds.push(m);
         }
