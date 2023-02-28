@@ -12,8 +12,13 @@ fields:
     field_type:
       Float:
         unit: KJ/kg
+  fat_density:
+    description: Fat in food
+    field_type:
+      Float:
+        unit: kg/kg
 data_sources:
   - Mock:
-      data_path: example_configs/food/food_1.yaml
-  - Mock:
-      data_path: example_configs/food/food_2.yaml
+      data_path: food_1.yaml
+  - Rest:
+      base_url: http://localhost:5000
