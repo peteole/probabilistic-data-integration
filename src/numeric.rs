@@ -68,7 +68,7 @@ impl NumericFieldValue {
             NumericFieldValue::Exact(v) => *v,
             NumericFieldValue::Uniform { min, max } => (min + max) / 2.0,
             NumericFieldValue::Combination { mean, .. } => *mean,
-            NumericFieldValue::Error => f64::NAN,
+            NumericFieldValue::Error => NAN,
         }
     }
 
@@ -77,7 +77,7 @@ impl NumericFieldValue {
             NumericFieldValue::Normal { sigma, mean: _ } => *sigma,
             NumericFieldValue::Exact(_) => 0.0,
             NumericFieldValue::Uniform { min, max } => (max - min) / 12.0_f64.sqrt(),
-            NumericFieldValue::Combination { mean, .. } => *mean,
+            NumericFieldValue::Combination { sigma, .. } => *sigma,
             NumericFieldValue::Error => NAN,
         }
     }
@@ -198,8 +198,11 @@ mod tests {
     #[test]
     fn combination() {
         let uf = NumericFieldValue::merge(vec![
-            NumericFieldValue::Uniform { min: -0.1, max: 0.5 },
-            NumericFieldValue::Uniform { min: 0.2, max: 0.4 }
+            NumericFieldValue::Uniform {
+                min: -0.1,
+                max: 0.5,
+            },
+            NumericFieldValue::Uniform { min: 0.2, max: 0.4 },
         ]);
         assert!(
             (uf.integrate(|x, f| f) - 1.0).abs() < 0.01,
