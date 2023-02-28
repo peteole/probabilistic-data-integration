@@ -76,10 +76,21 @@ impl NumericFieldValue {
         match self {
             NumericFieldValue::Normal { sigma, mean: _ } => *sigma,
             NumericFieldValue::Exact(_) => 0.0,
-            NumericFieldValue::Uniform { min, max } => (max - min) / 12.0,
+            NumericFieldValue::Uniform { min, max } => (max - min) / 12.0_f64.sqrt(),
             NumericFieldValue::Combination { mean, .. } => *mean,
             NumericFieldValue::Error => NAN,
         }
+    }
+    /// takes a callback that maps x and the probability density at x to the value to be integrated
+    pub fn integrate<F>(&self, f: F) -> f64
+    where
+        F: Fn(f64, f64) -> f64,
+    {
+        let range = (
+            self.mean() - 3.0 * self.sigma(),
+            self.mean() + 3.0 * self.sigma(),
+        );
+        integrate(|x1| f(x1, self.get_value(x1)), range, G20K41(1.0e-3))
     }
 
     pub fn merge(v: Vec<Self>) -> Self {
@@ -139,5 +150,68 @@ impl NumericFieldValue {
         let y = x.clone().into_iter().map(|x| self.get_value(x)).collect();
 
         DistributionPlot { x, y }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn uniform() {
+        let uf = NumericFieldValue::Uniform {
+            min: -0.1,
+            max: 0.5,
+        };
+        assert!(
+            (uf.integrate(|x, f| f) - 1.0).abs() < 0.01,
+            "is no probability distribution"
+        );
+        assert!(
+            (uf.integrate(|x, f| f * x) - 0.2).abs() < 0.01,
+            "has wrong mean"
+        );
+        assert!(
+            (uf.integrate(|x, f| f * (x - 0.2).powi(2)) - 0.6 * 0.6 / 12.0).abs() < 0.01,
+            "has wrong variance"
+        );
+    }
+    #[test]
+    fn normal() {
+        let uf = NumericFieldValue::Normal {
+            sigma: 0.4,
+            mean: 0.2,
+        };
+        assert!(
+            (uf.integrate(|x, f| f) - 1.0).abs() < 0.01,
+            "is no probability distribution"
+        );
+        assert!(
+            (uf.integrate(|x, f| f * x) - 0.2).abs() < 0.01,
+            "has wrong mean"
+        );
+        assert!(
+            (uf.integrate(|x, f| f * (x - 0.2).powi(2)) - 0.4 * 0.4).abs() < 0.01,
+            "has wrong variance"
+        );
+    }
+    #[test]
+    fn combination() {
+        let uf = NumericFieldValue::merge(vec![
+            NumericFieldValue::Uniform { min: -0.1, max: 0.5 },
+            NumericFieldValue::Uniform { min: 0.2, max: 0.4 }
+        ]);
+        assert!(
+            (uf.integrate(|x, f| f) - 1.0).abs() < 0.01,
+            "is no probability distribution"
+        );
+        assert!(
+            (uf.integrate(|x, f| f * x) - 0.3).abs() < 0.01,
+            "has wrong mean"
+        );
+        assert!(
+            (uf.integrate(|x, f| f * (x - 0.2).powi(2)) - 0.2 * 0.2 / 12.0).abs() < 0.01,
+            "has wrong variance"
+        );
     }
 }
