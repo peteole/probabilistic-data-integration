@@ -33,3 +33,22 @@ $$
 p(X=x|Y_2=y_2)=\frac{p(Y_2=y_2|X=x)p(X=x)}{p(Y_2=y_2)}=\frac{g_1(x)g_2(x)}{\sum_{x'}p(Y_2=y_2|X=x')p(X=x')}=\frac{g_1(x)g_2(x)}{\sum_{x'}g_1(x')g_2(x')}
 $$
 Repeating this process for all data sources gives the result above.
+
+## Features
+Data sources:
+- [x] GRPC
+- [x] Rest
+- [x] Mock
+- [ ] SQL
+
+Probability Distributions
+- [x] Exact (delta)
+- [x] Normal
+- [x] Uniform
+- [ ] Tabular
+- [x] Discrete (strings)
+
+API
+- [x] Rust function
+- [x] GraphQL
+- [ ] REST
