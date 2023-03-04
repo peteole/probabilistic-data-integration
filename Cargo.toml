@@ -1,7 +1,11 @@
 [package]
-name = "tag-search"
+name = "probabilistic-data-integration"
 version = "0.1.0"
 edition = "2021"
+authors=[
+    "Ole Petersen <peteole2707@gmail.com>"
+]
+readme="README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
