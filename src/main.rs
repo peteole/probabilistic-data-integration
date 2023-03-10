@@ -17,7 +17,7 @@ use poem::{
     Route, Server,
 };
 
-use clap::{builder::Str, Parser};
+use clap::{Parser};
 use graphql::get_schema;
 use search_engine_config::Config;
 

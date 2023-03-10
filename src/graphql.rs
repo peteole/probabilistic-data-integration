@@ -1,8 +1,8 @@
-use std::{collections::HashMap, sync::Arc};
+use std::{sync::Arc};
 
 use async_graphql::http::GraphiQLSource;
 // use async_graphql_poem::GraphQL;
-use poem::{get, handler, web::Html, IntoResponse};
+use poem::{handler, web::Html, IntoResponse};
 #[handler]
 pub async fn graphiql() -> impl IntoResponse {
     Html(GraphiQLSource::build().endpoint("/").finish())
@@ -57,7 +57,7 @@ pub fn get_schema(search_engine: Arc<SearchEngine>) -> Result<Schema, SchemaErro
                                     None => return Ok(None),
                                 };
                                 match &result.1 {
-                                    crate::search_engine::FieldValue::String(s) => return Ok(None),
+                                    crate::search_engine::FieldValue::String(_s) => return Ok(None),
                                     crate::search_engine::FieldValue::Numeric(n) => {
                                         return Ok(Some(FieldValue::boxed_any(Box::new(n.clone()))))
                                     }
@@ -244,7 +244,7 @@ pub fn get_numeric_field_value() -> Object {
         .field(numeric_value_field(NumericFieldGetter {
             name: "combination_scaling_factor",
             reducer: |nfv: NumericFieldValue| match nfv {
-                NumericFieldValue::Combination { scaling_factor,components:_, mean, sigma } => Some(scaling_factor),
+                NumericFieldValue::Combination { scaling_factor,components:_, mean: _, sigma: _ } => Some(scaling_factor),
                 _ => None,
             },
             description: "Inverse of integral of the product of all component probabilities.",

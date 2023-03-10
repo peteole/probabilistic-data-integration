@@ -164,7 +164,7 @@ mod tests {
             max: 0.5,
         };
         assert!(
-            (uf.integrate(|x, f| f) - 1.0).abs() < 0.01,
+            (uf.integrate(|_x, f| f) - 1.0).abs() < 0.01,
             "is no probability distribution"
         );
         assert!(
@@ -183,7 +183,7 @@ mod tests {
             mean: 0.2,
         };
         assert!(
-            (uf.integrate(|x, f| f) - 1.0).abs() < 0.01,
+            (uf.integrate(|_x, f| f) - 1.0).abs() < 0.01,
             "is no probability distribution"
         );
         assert!(
@@ -205,7 +205,7 @@ mod tests {
             NumericFieldValue::Uniform { min: 0.2, max: 0.4 },
         ]);
         assert!(
-            (uf.integrate(|x, f| f) - 1.0).abs() < 0.01,
+            (uf.integrate(|_x, f| f) - 1.0).abs() < 0.01,
             "is no probability distribution"
         );
         assert!(
