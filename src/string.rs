@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub enum StringFieldValue {
     Exact(String),
     /// Possible values mapped to their probability. If the sum of the probabilities is not 1, the remaining probability is assigned to the "other" value.

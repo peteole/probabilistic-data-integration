@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::Arc};
 
 use async_graphql::http::GraphiQLSource;
 // use async_graphql_poem::GraphQL;
@@ -8,14 +8,14 @@ pub async fn graphiql() -> impl IntoResponse {
     Html(GraphiQLSource::build().endpoint("/").finish())
 }
 
-use async_graphql::{dynamic::*, Value};
 use crate::{
     numeric::NumericFieldValue,
     search_engine::{SearchEngine, SearchResponse},
 };
+use async_graphql::{dynamic::*, Value};
 type KeyValuePair = (String, f64);
 
-pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
+pub fn get_schema(search_engine: Arc<SearchEngine>) -> Result<Schema, SchemaError> {
     let key_value_pair = Object::new("KeyValuePair")
         .field(Field::new(
             "key",
@@ -57,9 +57,7 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
                                     None => return Ok(None),
                                 };
                                 match &result.1 {
-                                    crate::search_engine::FieldValue::String(s) => {
-                                        return Ok(None)
-                                    }
+                                    crate::search_engine::FieldValue::String(s) => return Ok(None),
                                     crate::search_engine::FieldValue::Numeric(n) => {
                                         return Ok(Some(FieldValue::boxed_any(Box::new(n.clone()))))
                                     }
@@ -71,52 +69,53 @@ pub fn get_schema(search_engine: SearchEngine) -> Result<Schema, SchemaError> {
                 );
             }
             crate::search_engine::FieldType::String => {
-                search_result_builder =
-                    search_result_builder.field(
-                        Field::new(
-                            field_name.clone(),
-                            TypeRef::named_nn_list(key_value_pair.type_name()),
-                            move |ctx| {
-                                let field_name = field_name.clone();
-                                FieldFuture::new(async move {
-                                    let data =
-                                        ctx.parent_value.try_downcast_ref::<SearchResponse>()?;
-                                    let result = match data.fields.get(&field_name as &str) {
-                                        Some(v) => v,
-                                        None => return Ok(None),
-                                    };
+                search_result_builder = search_result_builder.field(
+                    Field::new(
+                        field_name.clone(),
+                        TypeRef::named_nn_list(key_value_pair.type_name()),
+                        move |ctx| {
+                            let field_name = field_name.clone();
+                            FieldFuture::new(async move {
+                                let data = ctx.parent_value.try_downcast_ref::<SearchResponse>()?;
+                                let result = match data.fields.get(&field_name as &str) {
+                                    Some(v) => v,
+                                    None => return Ok(None),
+                                };
 
-                                    match &result.1 {
-                                        crate::search_engine::FieldValue::String(s) => {
-                                            return match s {
-                                        crate::string::StringFieldValue::Exact(e) => {
-                                            return Ok(Some(FieldValue::list(vec![
-                                                FieldValue::boxed_any(Box::new((e.clone(), 1.0))),
-                                            ])));
-                                        }
-                                        crate::string::StringFieldValue::Distribution(r) => {
-                                            return Ok(Some(FieldValue::list(r.iter().map(
-                                                |(k, v)| {
+                                match &result.1 {
+                                    crate::search_engine::FieldValue::String(s) => {
+                                        return match s {
+                                            crate::string::StringFieldValue::Exact(e) => {
+                                                return Ok(Some(FieldValue::list(vec![
                                                     FieldValue::boxed_any(Box::new((
-                                                        k.clone(),
-                                                        v.clone(),
-                                                    )))
-                                                },
-                                            ))));
-                                        }
-                                        _ => Ok(None),
-                                    };
-                                        }
-                                        _ => return Ok(None),
-                                    };
-                                })
-                            },
-                        )
-                        .description(format!(
-                            "{}. Result is a distribution, mapping each key to a probability",
-                            field.description
-                        )),
+                                                        e.clone(),
+                                                        1.0,
+                                                    ))),
+                                                ])));
+                                            }
+                                            crate::string::StringFieldValue::Distribution(r) => {
+                                                return Ok(Some(FieldValue::list(r.iter().map(
+                                                    |(k, v)| {
+                                                        FieldValue::boxed_any(Box::new((
+                                                            k.clone(),
+                                                            v.clone(),
+                                                        )))
+                                                    },
+                                                ))));
+                                            }
+                                            _ => Ok(None),
+                                        };
+                                    }
+                                    _ => return Ok(None),
+                                };
+                            })
+                        },
                     )
+                    .description(format!(
+                        "{}. Result is a distribution, mapping each key to a probability",
+                        field.description
+                    )),
+                )
             }
         }
     }

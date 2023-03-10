@@ -1,7 +1,9 @@
 # Probabilistic Data Integration
+
 This software allows integrating multiple probabilistic data sources into one unified view.
 
 ## Motivation
+
 Consider a scenario where attributes should be gathered on entities from multiple data sources. For example, nutrition attributes such as the amount of fat and proteins in food products should be evaluated. The data sources could be for instance
 
 1. The knowledge that every product can only contain between 0% and 100% of protein and fat
@@ -12,6 +14,7 @@ Consider a scenario where attributes should be gathered on entities from multipl
 All these pieces of information should be reconciled into one estimate for each quantity of interest.
 
 ## Theory
+
 The most straightforward would be to always use the most accurate data source and ignore the rest. However, it is not always easy to say which data source this is: In the example of nutrition data, the estimate that the content of each quantity is between 0% and 100% may be very inaccurate most times compared to an accurate value from a database. But in some cases, the user may have made a mistake while converting units, resulting in an absurd value of fat in the database. Here, the very rough estimate should take over.
 
 Therefore, a more advanced approach is chosen: each data source is modeled as a measurement with an uncertainty of some distribution. In other words, each data source $i$ states that the real value of the quantity is distributed as a random variable $Y_i$, with $g_i(x)=p(Y_i=x)$. The distribution of $Y_i$ depends on the real value of the variable that should be measured, $X$, and on the distribution of the error. Therefore, the likelihood for a value of $X$ stated by $g_i(x)\equiv p(Y_i=y_i|X=x)$. The values measured by the data sources are $y_i$. Then the following formula is used to compute the probability distribution of $x$:
@@ -40,13 +43,16 @@ $$
 Repeating this process for all data sources gives the result above.
 
 ## Features
+
 Data sources:
+
 - [x] GRPC
 - [x] Rest
 - [x] Mock
 - [ ] SQL
 
 Probability Distributions
+
 - [x] Exact (delta)
 - [x] Normal
 - [x] Uniform
@@ -54,6 +60,7 @@ Probability Distributions
 - [x] Discrete (strings)
 
 API
+
 - [x] Rust function
 - [x] GraphQL
 - [ ] REST

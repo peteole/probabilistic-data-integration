@@ -5,17 +5,24 @@ pub mod search_engine;
 pub mod search_engine_config;
 pub mod search_result;
 pub mod string;
-use std::{ path::PathBuf};
+use std::{path::PathBuf, sync::Arc};
 pub mod graphql;
 use async_graphql_poem::GraphQL;
-use poem::{get, listener::TcpListener, Route, Server};
+use poem::EndpointExt;
+use poem::{
+    get,
+    listener::TcpListener,
+    middleware::AddData,
+    web::{Data, Path},
+    Route, Server,
+};
 
-use clap::Parser;
+use clap::{builder::Str, Parser};
 use graphql::get_schema;
 use search_engine_config::Config;
 
-
 use crate::graphql::graphiql;
+use crate::search_engine::SearchEngine;
 
 /// Data integration engine
 #[derive(Parser, Debug)]
@@ -40,13 +47,26 @@ async fn main() {
     let engine = configuration.to_search_engine().await;
     let result = engine.search("apple".to_string()).await;
     println!("{:?}", result);
-
-    let schema = get_schema(engine).unwrap();
-    let app = Route::new().at("/", get(graphiql).post(GraphQL::new(schema)));
+    let arced_engine = Arc::new(engine);
+    let schema = get_schema(arced_engine.clone()).unwrap();
+    let app = Route::new()
+        .at("/", get(graphiql).post(GraphQL::new(schema)))
+        .at("/search/::query", http_search)
+        .with(AddData::new(arced_engine));
 
     println!("GraphiQL IDE: http://localhost:8000");
     Server::new(TcpListener::bind("127.0.0.1:8000"))
         .run(app)
         .await
         .unwrap();
+}
+use poem::web::Json;
+
+#[poem::handler]
+async fn http_search(
+    search_engine: Data<&Arc<SearchEngine>>,
+    Path(query): Path<String>,
+) -> Json<serde_json::Value> {
+    let result = search_engine.search(query).await;
+    Json(serde_json::to_value(result).unwrap())
 }
