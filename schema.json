@@ -1,0 +1,254 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SearchResponse",
+  "type": "object",
+  "required": [
+    "fields"
+  ],
+  "properties": {
+    "fields": {
+      "description": "Map from the field key to its value",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": [
+          {
+            "$ref": "#/definitions/Field"
+          },
+          {
+            "$ref": "#/definitions/FieldValue"
+          }
+        ],
+        "maxItems": 2,
+        "minItems": 2
+      }
+    }
+  },
+  "definitions": {
+    "Field": {
+      "type": "object",
+      "required": [
+        "description",
+        "field_type"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "field_type": {
+          "$ref": "#/definitions/FieldType"
+        }
+      }
+    },
+    "FieldType": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "String"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "Float"
+          ],
+          "properties": {
+            "Float": {
+              "type": "object",
+              "required": [
+                "unit"
+              ],
+              "properties": {
+                "unit": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "FieldValue": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "String"
+          ],
+          "properties": {
+            "String": {
+              "$ref": "#/definitions/StringFieldValue"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "Numeric"
+          ],
+          "properties": {
+            "Numeric": {
+              "$ref": "#/definitions/NumericFieldValue"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "NumericFieldValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "Error"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "Normal"
+          ],
+          "properties": {
+            "Normal": {
+              "type": "object",
+              "required": [
+                "mean",
+                "sigma"
+              ],
+              "properties": {
+                "mean": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "sigma": {
+                  "type": "number",
+                  "format": "double"
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "Exact"
+          ],
+          "properties": {
+            "Exact": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "Uniform"
+          ],
+          "properties": {
+            "Uniform": {
+              "type": "object",
+              "required": [
+                "max",
+                "min"
+              ],
+              "properties": {
+                "max": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "min": {
+                  "type": "number",
+                  "format": "double"
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "Combination"
+          ],
+          "properties": {
+            "Combination": {
+              "type": "object",
+              "required": [
+                "components",
+                "mean",
+                "scaling_factor",
+                "sigma"
+              ],
+              "properties": {
+                "components": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/NumericFieldValue"
+                  }
+                },
+                "mean": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "scaling_factor": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "sigma": {
+                  "type": "number",
+                  "format": "double"
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "StringFieldValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "Error"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "Exact"
+          ],
+          "properties": {
+            "Exact": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Possible values mapped to their probability. If the sum of the probabilities is not 1, the remaining probability is assigned to the \"other\" value.",
+          "type": "object",
+          "required": [
+            "Distribution"
+          ],
+          "properties": {
+            "Distribution": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number",
+                "format": "double"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

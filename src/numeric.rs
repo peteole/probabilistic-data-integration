@@ -1,8 +1,9 @@
 use std::f64::NAN;
 
 use peroxide::{fuga::Integral::*, numerical::integral::*};
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize,JsonSchema)]
 pub enum NumericFieldValue {
     Normal {
         sigma: f64,
