@@ -33,7 +33,7 @@ pub struct DistributionPlot {
 impl NumericFieldValue {
     pub fn get_value(&self, x: f64) -> f64 {
         match self {
-            NumericFieldValue::Normal { sigma, mu: mu } => {
+            NumericFieldValue::Normal { sigma, mu } => {
                 (1.0 / sigma / (2.0 * std::f64::consts::PI).sqrt())
                     * (-0.5 * ((x - mu) / sigma).powi(2)).exp()
             }
@@ -65,17 +65,17 @@ impl NumericFieldValue {
 
     pub fn mu(&self) -> f64 {
         match self {
-            NumericFieldValue::Normal { sigma: _, mu: mu } => *mu,
+            NumericFieldValue::Normal {  mu,.. } => *mu,
             NumericFieldValue::Exact(v) => *v,
             NumericFieldValue::Uniform { min, max } => (min + max) / 2.0,
-            NumericFieldValue::Combination { mu: mu, .. } => *mu,
+            NumericFieldValue::Combination { mu, .. } => *mu,
             NumericFieldValue::Error => NAN,
         }
     }
 
     pub fn sigma(&self) -> f64 {
         match self {
-            NumericFieldValue::Normal { sigma, mu: _ } => *sigma,
+            NumericFieldValue::Normal { sigma,.. } => *sigma,
             NumericFieldValue::Exact(_) => 0.0,
             NumericFieldValue::Uniform { min, max } => (max - min) / 12.0_f64.sqrt(),
             NumericFieldValue::Combination { sigma, .. } => *sigma,
