@@ -56,11 +56,12 @@ Probability Distributions
 - [x] Exact (delta)
 - [x] Normal
 - [x] Uniform
-- [ ] Tabular
 - [x] Discrete (strings)
+- [ ] Tabular
+- [ ] Mathematical expressions of probability distributions (sums, products...)
 
 API
 
 - [x] Rust function
 - [x] GraphQL
-- [ ] REST
+- [x] REST
