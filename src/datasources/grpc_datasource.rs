@@ -31,7 +31,7 @@ pub fn convert_numeric_field_value(
         grpc_ds::numeric_field_value::Value::Normal(n) => {
             crate::numeric::NumericFieldValue::Normal {
                 sigma: n.sigma.into(),
-                mean: n.mean.into(),
+                mu: n.mu.into(),
             }
         }
         grpc_ds::numeric_field_value::Value::Uniform(u) => {
@@ -48,7 +48,7 @@ pub fn convert_numeric_field_value(
                     .filter_map(|v| v.value.map(convert_numeric_field_value))
                     .collect(),
                 scaling_factor: v.scaling_factor.into(),
-                mean: v.mean.into(),
+                mu: v.mu.into(),
                 sigma: v.sigma.into(),
             }
         }

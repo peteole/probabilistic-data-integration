@@ -3,7 +3,7 @@ data:
     numeric_fields:
       weight:
         Normal:
-          mean: 0.3
+          mu: 0.3
           sigma: 0.2
     string_fields:
       color:
@@ -14,7 +14,7 @@ data:
     numeric_fields:
       weight:
         Normal:
-          mean: 0.15
+          mu: 0.15
           sigma: 0.2
     string_fields:
       color:

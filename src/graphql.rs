@@ -1,4 +1,4 @@
-use std::{sync::Arc};
+use std::sync::Arc;
 
 use async_graphql::http::GraphiQLSource;
 // use async_graphql_poem::GraphQL;
@@ -57,7 +57,9 @@ pub fn get_schema(search_engine: Arc<SearchEngine>) -> Result<Schema, SchemaErro
                                     None => return Ok(None),
                                 };
                                 match &result.1 {
-                                    crate::search_engine::FieldValue::String(_s) => return Ok(None),
+                                    crate::search_engine::FieldValue::String(_s) => {
+                                        return Ok(None)
+                                    }
                                     crate::search_engine::FieldValue::Numeric(n) => {
                                         return Ok(Some(FieldValue::boxed_any(Box::new(n.clone()))))
                                     }
@@ -178,8 +180,8 @@ pub fn get_numeric_field_value() -> Object {
     Object::new(TYPENAME)
         .description("Distribution over a numeric field")
         .field(numeric_value_field(NumericFieldGetter {
-            name: "mean",
-            reducer: |nfv: NumericFieldValue| Some(nfv.mean()),
+            name: "mu",
+            reducer: |nfv: NumericFieldValue| Some(nfv.mu()),
             description: "Mean of the field",
         }))
         .field(numeric_value_field(NumericFieldGetter {
@@ -198,7 +200,7 @@ pub fn get_numeric_field_value() -> Object {
         .field(numeric_value_field(NumericFieldGetter {
             name: "normal_mean",
             reducer: |nfv: NumericFieldValue| match nfv {
-                NumericFieldValue::Normal { mean: m, sigma: _ } => Some(m),
+                NumericFieldValue::Normal { mu: m, sigma: _ } => Some(m),
                 _ => None,
             },
             description: "Mean of normal distribution if it is a normal distribution, null else",
@@ -206,7 +208,7 @@ pub fn get_numeric_field_value() -> Object {
         .field(numeric_value_field(NumericFieldGetter {
             name: "normal_sigma",
             reducer: |nfv: NumericFieldValue| match nfv {
-                NumericFieldValue::Normal { mean: _, sigma: s } => Some(s),
+                NumericFieldValue::Normal { sigma: s,.. } => Some(s),
                 _ => None,
             },
             description: "Standard deviation of normal distribution if it is a normal distribution, null else",
@@ -244,7 +246,7 @@ pub fn get_numeric_field_value() -> Object {
         .field(numeric_value_field(NumericFieldGetter {
             name: "combination_scaling_factor",
             reducer: |nfv: NumericFieldValue| match nfv {
-                NumericFieldValue::Combination { scaling_factor,components:_, mean: _, sigma: _ } => Some(scaling_factor),
+                NumericFieldValue::Combination { scaling_factor,components:_, mu: _, sigma: _ } => Some(scaling_factor),
                 _ => None,
             },
             description: "Inverse of integral of the product of all component probabilities.",

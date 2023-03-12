@@ -36,7 +36,7 @@ impl DataSource for OpenFoodFactsDataSource {
                                     "energy_density".to_string(),
                                     NumericFieldValue::Normal {
                                         sigma: energy.into(),
-                                        mean: (energy / 10.0).into(),
+                                        mu: (energy / 10.0).into(),
                                     },
                                 )]),
                                 string_fields: HashMap::new(),

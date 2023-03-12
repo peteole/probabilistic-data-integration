@@ -9,13 +9,13 @@ cache = {
         'numeric_fields': {
             'energy_density': {
                 'Normal': {
-                    'mean': 2500,
+                    'mu': 2500,
                     'sigma': 500
                 }
             },
             'fat_density': {
                 'Normal': {
-                    'mean': 10,
+                    'mu': 10,
                     'sigma': 3
                 }
             },
@@ -37,13 +37,13 @@ def search():
         'numeric_fields': {
             'energy_density': {
                 'Normal': {
-                    'mean': nutriments['energy_100g']/100*1000,
+                    'mu': nutriments['energy_100g']/100*1000,
                     'sigma': 0.1*nutriments['energy_100g']/100*1000
                 }
             },
             'fat_density': {
                 'Normal': {
-                    'mean': nutriments['fat_100g']/100,
+                    'mu': nutriments['fat_100g']/100,
                     'sigma': 0.1*nutriments['fat_100g']/100
                 }
             },

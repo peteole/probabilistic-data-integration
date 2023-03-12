@@ -18,14 +18,14 @@ message Uniform{
     float max = 2;
 }
 message Normal{
-    float mean = 1;
+    float mu = 1;
     float sigma = 2;
 }
 
 message Combination{
     repeated NumericFieldValue values = 1;
     float scaling_factor=2;
-    float mean = 3;
+    float mu = 3;
     float sigma = 4;
 }
 

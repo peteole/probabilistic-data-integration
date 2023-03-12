@@ -3,11 +3,11 @@ use std::f64::NAN;
 use peroxide::{fuga::Integral::*, numerical::integral::*};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Clone, Serialize, Deserialize,JsonSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
 pub enum NumericFieldValue {
     Normal {
         sigma: f64,
-        mean: f64,
+        mu: f64,
     },
     Exact(f64),
     Uniform {
@@ -17,7 +17,7 @@ pub enum NumericFieldValue {
     Combination {
         components: Vec<NumericFieldValue>,
         scaling_factor: f64,
-        mean: f64,
+        mu: f64,
         sigma: f64,
     },
     Error,
@@ -33,9 +33,9 @@ pub struct DistributionPlot {
 impl NumericFieldValue {
     pub fn get_value(&self, x: f64) -> f64 {
         match self {
-            NumericFieldValue::Normal { sigma, mean } => {
+            NumericFieldValue::Normal { sigma, mu: mu } => {
                 (1.0 / sigma / (2.0 * std::f64::consts::PI).sqrt())
-                    * (-0.5 * ((x - mean) / sigma).powi(2)).exp()
+                    * (-0.5 * ((x - mu) / sigma).powi(2)).exp()
             }
             NumericFieldValue::Exact(v) => {
                 if *v == x {
@@ -63,19 +63,19 @@ impl NumericFieldValue {
         }
     }
 
-    pub fn mean(&self) -> f64 {
+    pub fn mu(&self) -> f64 {
         match self {
-            NumericFieldValue::Normal { sigma: _, mean } => *mean,
+            NumericFieldValue::Normal { sigma: _, mu: mu } => *mu,
             NumericFieldValue::Exact(v) => *v,
             NumericFieldValue::Uniform { min, max } => (min + max) / 2.0,
-            NumericFieldValue::Combination { mean, .. } => *mean,
+            NumericFieldValue::Combination { mu: mu, .. } => *mu,
             NumericFieldValue::Error => NAN,
         }
     }
 
     pub fn sigma(&self) -> f64 {
         match self {
-            NumericFieldValue::Normal { sigma, mean: _ } => *sigma,
+            NumericFieldValue::Normal { sigma, mu: _ } => *sigma,
             NumericFieldValue::Exact(_) => 0.0,
             NumericFieldValue::Uniform { min, max } => (max - min) / 12.0_f64.sqrt(),
             NumericFieldValue::Combination { sigma, .. } => *sigma,
@@ -88,8 +88,8 @@ impl NumericFieldValue {
         F: Fn(f64, f64) -> f64,
     {
         let range = (
-            self.mean() - 3.0 * self.sigma(),
-            self.mean() + 3.0 * self.sigma(),
+            self.mu() - 3.0 * self.sigma(),
+            self.mu() + 3.0 * self.sigma(),
         );
         integrate(|x1| f(x1, self.get_value(x1)), range, G20K41(1.0e-3))
     }
@@ -112,25 +112,25 @@ impl NumericFieldValue {
             }
             return NumericFieldValue::Error;
         }
-        let mean_approx = v.iter().map(|val| val.mean()).sum::<f64>() / (v.len() as f64);
+        let mu_approx = v.iter().map(|val| val.mu()).sum::<f64>() / (v.len() as f64);
         let sigma_approx = v.iter().map(|val| val.sigma()).sum::<f64>() / (v.len() as f64);
         let range = (
-            mean_approx - 3.0 * sigma_approx,
-            mean_approx + 3.0 * sigma_approx,
+            mu_approx - 3.0 * sigma_approx,
+            mu_approx + 3.0 * sigma_approx,
         );
         let area = integrate(
             |x1| v.iter().map(|val| val.get_value(x1)).product(),
             range,
             G20K41(1.0e-3),
         );
-        let mean = integrate(
+        let mu = integrate(
             |x1| x1 * v.iter().map(|val| val.get_value(x1)).product::<f64>() / area,
             range,
             G20K41(1.0e-3),
         );
         let variance = integrate(
             |x1| {
-                (x1 - mean) * (x1 - mean) * v.iter().map(|val| val.get_value(x1)).product::<f64>()
+                (x1 - mu) * (x1 - mu) * v.iter().map(|val| val.get_value(x1)).product::<f64>()
                     / area
             },
             range,
@@ -139,14 +139,14 @@ impl NumericFieldValue {
         return NumericFieldValue::Combination {
             components: v,
             scaling_factor: 1.0 / area,
-            mean: mean,
+            mu: mu,
             sigma: variance.sqrt(),
         };
     }
 
     pub fn get_distribution(&self, steps: usize) -> DistributionPlot {
         let x: Vec<f64> = (0..steps)
-            .map(|i| (i as f64 / (steps as f64) - 0.5) * 2.0 * 2.0 * self.sigma() + self.mean())
+            .map(|i| (i as f64 / (steps as f64) - 0.5) * 2.0 * 2.0 * self.sigma() + self.mu())
             .collect();
         let y = x.clone().into_iter().map(|x| self.get_value(x)).collect();
 
@@ -170,7 +170,7 @@ mod tests {
         );
         assert!(
             (uf.integrate(|x, f| f * x) - 0.2).abs() < 0.01,
-            "has wrong mean"
+            "has wrong mu"
         );
         assert!(
             (uf.integrate(|x, f| f * (x - 0.2).powi(2)) - 0.6 * 0.6 / 12.0).abs() < 0.01,
@@ -181,7 +181,7 @@ mod tests {
     fn normal() {
         let uf = NumericFieldValue::Normal {
             sigma: 0.4,
-            mean: 0.2,
+            mu: 0.2,
         };
         assert!(
             (uf.integrate(|_x, f| f) - 1.0).abs() < 0.01,
@@ -189,7 +189,7 @@ mod tests {
         );
         assert!(
             (uf.integrate(|x, f| f * x) - 0.2).abs() < 0.01,
-            "has wrong mean"
+            "has wrong mu"
         );
         assert!(
             (uf.integrate(|x, f| f * (x - 0.2).powi(2)) - 0.4 * 0.4).abs() < 0.01,
@@ -211,7 +211,7 @@ mod tests {
         );
         assert!(
             (uf.integrate(|x, f| f * x) - 0.3).abs() < 0.01,
-            "has wrong mean"
+            "has wrong mu"
         );
         assert!(
             (uf.integrate(|x, f| f * (x - 0.2).powi(2)) - 0.2 * 0.2 / 12.0).abs() < 0.01,
