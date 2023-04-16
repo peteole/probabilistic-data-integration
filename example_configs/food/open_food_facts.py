@@ -21,7 +21,8 @@ cache = {
             },
         },
         'string_fields': {}
-    }}
+    }
+}
 
 
 @app.route('/search', methods=['GET'])
@@ -32,19 +33,19 @@ def search():
     product = openfoodfacts.products.search(query, page_size=2)['products'][0]
     # print(product)
     nutriments = product['nutriments']
-    # print(nutriments)
+    print(nutriments)
     return json.dumps({
         'numeric_fields': {
             'energy_density': {
                 'Normal': {
-                    'mu': nutriments['energy_100g']/100*1000,
-                    'sigma': 0.1*nutriments['energy_100g']/100*1000
+                    'mu': float(nutriments['energy_100g'])/100*1000,
+                    'sigma': 0.1*float(nutriments['energy_100g'])/100*1000
                 }
             },
             'fat_density': {
                 'Normal': {
-                    'mu': nutriments['fat_100g']/100,
-                    'sigma': 0.1*nutriments['fat_100g']/100
+                    'mu': float(nutriments['fat_100g'])/100,
+                    'sigma': 0.1*float(nutriments['fat_100g'])/100
                 }
             },
         },
