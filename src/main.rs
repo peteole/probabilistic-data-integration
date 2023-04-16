@@ -48,8 +48,6 @@ async fn main() {
         .unwrap();
     println!("{:?}", configuration);
     let engine = configuration.to_search_engine().await;
-    let result = engine.search("apple".to_string()).await;
-    println!("{:?}", result);
     let arced_engine = Arc::new(engine);
     let schema = get_schema(arced_engine.clone()).unwrap();
     let app = Route::new()
