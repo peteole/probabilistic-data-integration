@@ -2,7 +2,7 @@ import openfoodfacts
 
 from flask import Flask, json, request
 
-api = Flask(__name__)
+app = Flask(__name__)
 # for offline demo
 cache = {
     'apple': {
@@ -24,7 +24,7 @@ cache = {
     }}
 
 
-@api.route('/search', methods=['GET'])
+@app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query')
     if query in cache.keys():
@@ -53,4 +53,4 @@ def search():
 
 
 if __name__ == '__main__':
-    api.run()
+    app.run()
