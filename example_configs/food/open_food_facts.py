@@ -30,9 +30,9 @@ def search():
     if query in cache.keys():
         return json.dumps(cache[query])
     product = openfoodfacts.products.search(query, page_size=2)['products'][0]
-    print(product)
+    # print(product)
     nutriments = product['nutriments']
-    print(nutriments)
+    # print(nutriments)
     return json.dumps({
         'numeric_fields': {
             'energy_density': {
