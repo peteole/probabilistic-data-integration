@@ -58,7 +58,7 @@ async fn main() {
         .with(AddData::new(arced_engine));
     let port = args.port.unwrap_or(8080);
     println!("GraphiQL IDE: http://localhost:{}/", port);
-    Server::new(TcpListener::bind(format!("127.0.0.1:{}", port)))
+    Server::new(TcpListener::bind(format!("0.0.0.0:{}", port)))
         .run(app)
         .await
         .unwrap();
