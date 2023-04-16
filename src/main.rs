@@ -31,6 +31,9 @@ struct Cli {
     /// Path to a config file containing the fields available on the search engine and the data sources. Defaults to `config.yaml`
     #[arg(short, long)]
     config: Option<PathBuf>,
+    /// Port to listen on. Defaults to 8080
+    #[arg(short, long)]
+    port: Option<u16>,
 }
 
 #[tokio::main]
@@ -53,9 +56,9 @@ async fn main() {
         .at("/", get(graphiql).post(GraphQL::new(schema)))
         .at("/search/::query", http_search)
         .with(AddData::new(arced_engine));
-
-    println!("GraphiQL IDE: http://localhost:8000");
-    Server::new(TcpListener::bind("127.0.0.1:8000"))
+    let port = args.port.unwrap_or(8080);
+    println!("GraphiQL IDE: http://localhost:{}/", port);
+    Server::new(TcpListener::bind(format!("0.0.0.0:{}", port)))
         .run(app)
         .await
         .unwrap();

@@ -1,8 +1,7 @@
 use crate::{
     datasource::DataSource,
     datasources::{
-        grpc_datasource::GrpcDataSource, mock_datasource::MockDataSource,
-        open_food_facts::OpenFoodFactsDataSource, rest_datasource::RestDatasource,
+        grpc_datasource::GrpcDataSource, mock_datasource::MockDataSource, rest_datasource::RestDatasource,
     },
     search_engine::{Field, SearchEngine},
 };
@@ -12,7 +11,7 @@ type FieldsConfig = HashMap<String, Field>;
 
 #[derive(Debug, Clone, Deserialize)]
 pub enum DataSourceConfig {
-    OpenFoodFacts,
+    // OpenFoodFacts,
     Mock { data_path: PathBuf },
     Grpc { address: String },
     Rest { base_url: String },
@@ -29,7 +28,7 @@ impl Config {
         let mut new_ds = Vec::with_capacity(self.data_sources.len());
         for data_source in self.data_sources {
             let m: Box<dyn DataSource + Sync + Send> = match data_source {
-                DataSourceConfig::OpenFoodFacts => Box::new(OpenFoodFactsDataSource::default()),
+                // DataSourceConfig::OpenFoodFacts => Box::new(OpenFoodFactsDataSource::default()),
                 DataSourceConfig::Grpc { address } => {
                     let ds = GrpcDataSource::new(address).await;
                     match ds {

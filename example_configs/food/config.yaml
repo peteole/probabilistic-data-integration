@@ -21,4 +21,4 @@ data_sources:
   - Mock:
       data_path: food_1.yaml
   - Rest:
-      base_url: http://localhost:5000
+      base_url: https://pdi-python-service.onrender.com

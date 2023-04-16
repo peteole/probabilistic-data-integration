@@ -17,7 +17,7 @@ path = "./src/generate_json_schema.rs"
 [dependencies]
 peroxide = "0.32.1"
 
-openapi={path="./src/datasources/open_food_facts/rust_api"}
+# openapi={path="./src/datasources/open_food_facts/rust_api"}
 async-trait = "0.1.58"
 futures = "0.3.25"
 tokio = { version = "1", features = ["full"] }
@@ -33,6 +33,7 @@ async-graphql-poem = "5.0.5"
 reqwest = { version = "0.11", features = ["json"] }
 serde_json = "1.0.94"
 schemars = "0.8.12"
+regex = "1"
 
 [build-dependencies]
 tonic-build = "0.8.4"
