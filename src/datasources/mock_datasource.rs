@@ -12,7 +12,15 @@ pub struct MockDataSource {
 #[async_trait]
 impl DataSource for MockDataSource {
     async fn search(&self, query: String) -> Option<SearchResult> {
-        return self.data.get(&query).cloned();
+        if let Some(res) =self.data.get(&query) {
+            return Some(res.clone())
+        }
+        for (key, value) in self.data.iter() {
+            if regex::Regex::new(&key).map(|r| r.is_match(&query)).unwrap_or(false){
+                return Some(value.clone())
+            }
+        }
+        None
     }
 }
 
