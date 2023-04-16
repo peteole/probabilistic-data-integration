@@ -129,7 +129,7 @@ pub fn get_schema(search_engine: Arc<SearchEngine>) -> Result<Schema, SchemaErro
             move |ctx| {
                 FieldFuture::new(async move {
                     let query = ctx.args.try_get("query")?;
-                    let search_engine = ctx.data::<SearchEngine>()?;
+                    let search_engine = ctx.data::<Arc<SearchEngine>>()?;
                     match query.string() {
                         Ok(q) => {
                             let cloned = q.to_owned();
