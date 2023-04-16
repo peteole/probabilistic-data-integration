@@ -65,3 +65,55 @@ API
 - [x] Rust function
 - [x] GraphQL
 - [x] REST
+
+## Demo
+
+The following exposes a GraphQL API that integrates several food data sources:
+
+https://pdi.onrender.com/
+
+You might try this query:
+
+```graphql
+query{
+  search(query:"nutella"){
+    energy_density{
+      mu
+      sigma
+    }
+    fat_density{
+      mu
+      sigma
+      probability_density(x:[0.0,0.1,0.2,0.3,0.4,0.5,0.6])
+    }
+  }
+}
+```
+And get the following result:
+```json
+{
+  "data": {
+    "search": {
+      "energy_density": {
+        "mu": 22519.999999999996,
+        "sigma": 2221.7745400408608
+      },
+      "fat_density": {
+        "mu": 0.30900000000000005,
+        "sigma": 0.03048527233004555,
+        "probability_density": [
+          2.49690249539351e-21,
+          1.5065849292388764e-9,
+          0.025709552700972648,
+          12.408071559301137,
+          0.1693647107640426,
+          6.538082957535243e-8,
+          7.13816849862352e-19
+        ]
+      }
+    }
+  }
+}
+```
+
+This demo uses [this](example_configs/food/config.yaml) config.
